@@ -1,4 +1,4 @@
-== C# API for McMyAdmin servers ==
+## C# API for McMyAdmin servers
 
 In progress! Licensed under the MIT licence.
 
