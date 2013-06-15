@@ -1,8 +1,8 @@
-﻿using McMyAdminAPI.DataTransferObjects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using McMyAdminAPI.DataTransferObjects;
 
 namespace McMyAdminAPI.Interfaces
 {
@@ -14,22 +14,22 @@ namespace McMyAdminAPI.Interfaces
         #region Properties
 
         /// <summary>
-        /// Gets whether the user is logged in.
+        /// Gets a value indicating whether the user is logged in.
         /// </summary>
         bool IsLoggedIn { get; }
 
         /// <summary>
-        /// Gets the ServerURL this instance is calling.
+        /// Gets a value indicating the ServerURL this instance is calling.
         /// </summary>
         string ServerURL { get; }
 
         /// <summary>
-        /// Gets the Authroisation Mask for the logged in user.
+        /// Gets a value indicating the Authorisation Mask for the logged in user.
         /// </summary>
         AuthMask AuthMask { get; }
 
         /// <summary>
-        /// Gets the User Mask for the currently logged in user.
+        /// Gets a value indicating the User Mask for the currently logged in user.
         /// </summary>
         UserMask UserMask { get; }
 
@@ -42,13 +42,13 @@ namespace McMyAdminAPI.Interfaces
         /// </summary>
         /// <param name="username">Username to log in with.</param>
         /// <param name="password">Password to log in with.</param>
-        /// <returns><see cref="true"/> if the user was able to log in, <see cref="false"/> if it failed.</returns>
+        /// <returns><c>true</c> if the user was able to log in, <c>false</c> if it failed.</returns>
         bool Login(string username, string password);
 
         /// <summary>
         /// Logout from the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool Logout();
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace McMyAdminAPI.Interfaces
         /// </summary>
         /// <param name="oldpassword">Current password.</param>
         /// <param name="newpassword">Password to change it to.</param>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool ChangePassword(string oldpassword, string newpassword);
 
         #endregion
@@ -66,36 +66,36 @@ namespace McMyAdminAPI.Interfaces
         /// <summary>
         /// Starts the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool StartServer();
 
         /// <summary>
         /// Stops the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool StopServer();
 
         /// <summary>
         /// Restarts the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool RestartServer();
 
         /// <summary>
         /// Kill the server, immediately terminating the process and potentially losing data.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool KillServer();
 
         /// <summary>
-        /// Put the server to sleep.
+        /// Puts the server to sleep.
         /// </summary>
         /// <remarks>
         /// "Sleep" in McMyAdmin is the same as stopping the server. 
         /// However, if someone tries to connect, McMyAdmin will restart the server, 
         /// and ask the player to try to reconnect in a few seconds.
         /// </remarks>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         bool SleepServer();
 
         #endregion
@@ -105,7 +105,7 @@ namespace McMyAdminAPI.Interfaces
         /// <summary>
         /// Retrieves the latest chat messages from the server.
         /// </summary>   
-        /// <param name="timestamp">The earlist timestamp to get. Defaults to -1, whic means get all Chat Messages in the server buffer.</param>
+        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
         /// <returns>
         /// An <see cref="IList"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
         /// in the McMyAdmin server with a timestamp greater than the one specified.
@@ -119,7 +119,7 @@ namespace McMyAdminAPI.Interfaces
         ServerInfo GetStatus();
 
         /// <summary>
-        /// Retrives a list of plugins in use on the server.
+        /// Retrieves a list of plugins in use on the server.
         /// </summary>
         /// <returns>An <see cref="IList"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
         IList<ServerPlugin> GetPlugins();

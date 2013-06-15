@@ -13,7 +13,7 @@ namespace McMyAdminAPI.DataTransferObjects
         #region Private Fields
 
         /// <summary>
-        /// The user authmask.
+        /// The user authorisation mask.
         /// </summary>
         private int authmask;
 
@@ -22,7 +22,7 @@ namespace McMyAdminAPI.DataTransferObjects
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the AuthMask structure.
+        /// Initialises a new instance of the <see cref="AuthMask"/> structure.
         /// </summary>
         /// <param name="authmask">The authorisation mask.</param>
         public AuthMask(int authmask)
@@ -35,139 +35,265 @@ namespace McMyAdminAPI.DataTransferObjects
         #region Public Properties
 
         /// <summary>
-        /// Gets whether the user can stop and kill the server.
+        /// Gets a value indicating whether the user can stop and kill the server.
         /// </summary>
-        public bool CanStopServer { get { return GetMaskComparison(1); } }
+        public bool CanStopServer
+        { 
+            get 
+            { 
+                return GetMaskComparison(1); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can start the server.
+        /// Gets a value indicating whether the user can start the server.
         /// </summary>
-        public bool CanStartServer { get { return GetMaskComparison(2); } }
+        public bool CanStartServer 
+        { 
+            get 
+            { 
+                return GetMaskComparison(2); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can restart the server.
+        /// Gets a value indicating whether the user can restart the server.
         /// </summary>
         /// <remarks>
-        /// There is no explcit permission for restart, but the user needs both 
+        /// There is no explicit permission for restart, but the user needs both 
         /// stop and start permissions to restart the server. This property reflects this.
         /// </remarks>
-        public bool CanRestartServer { get { return (CanStartServer && CanStopServer); } }
-        
-        /// <summary>
-        /// Gets whether the user can access the console.
-        /// </summary>
-        public bool CanAccessConsole { get { return GetMaskComparison(4); } }
-        
-        /// <summary>
-        /// Gets whether the user can modify the users and groups on the Minecraft server.
-        /// </summary>
-        public bool CanModifyMinecraftUsersAndGroups { get { return GetMaskComparison(8); } }
+        public bool CanRestartServer 
+        { 
+            get 
+            { 
+                return CanStartServer && CanStopServer; 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can alter the general game configuration.
+        /// Gets a value indicating whether the user can access the console.
+        /// </summary>
+        public bool CanAccessConsole 
+        { 
+            get 
+            {
+                return GetMaskComparison(4); 
+            } 
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the user can modify the users and groups on the Minecraft server.
+        /// </summary>
+        public bool CanModifyMinecraftUsersAndGroups 
+        { 
+            get 
+            { 
+                return GetMaskComparison(8); 
+            } 
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the user can alter the general game configuration.
         /// </summary>
         /// <remarks>
         /// These configuration properties are some of those that are found in the server.properties file.
         /// </remarks>
-        public bool CanModifyMinecraftConfig { get { return GetMaskComparison(16); } }
+        public bool CanModifyMinecraftConfig 
+        { 
+            get 
+            { 
+                return GetMaskComparison(16); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can alter the config on the features panel.
+        /// Gets a value indicating whether the user can alter the config on the features panel.
         /// </summary>
         /// <remarks>
         /// These configuration properties are extras the McMyAdmin provide, such as 
         /// inclusion on the McMyAdmin server list.
         /// </remarks>
-        public bool CanModifyFeaturesConfig { get { return GetMaskComparison(32); } }
+        public bool CanModifyFeaturesConfig 
+        { 
+            get 
+            { 
+                return GetMaskComparison(32); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can alter the server configuration.
+        /// Gets a value indicating whether the user can alter the server configuration.
         /// </summary>
         /// <remarks>
         /// There are the more destructive properties in the server.properties file.
         /// </remarks>
-        public bool CanModifySettingsConfig { get { return GetMaskComparison(64); } }
+        public bool CanModifySettingsConfig 
+        { 
+            get 
+            { 
+                return GetMaskComparison(64); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can manage plugins.
+        /// Gets a value indicating whether the user can manage plugins.
         /// </summary>
-        public bool CanManagePlugins { get { return GetMaskComparison(128); } }
+        public bool CanManagePlugins 
+        { 
+            get 
+            { 
+                return GetMaskComparison(128); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can delete the world.
+        /// Gets a value indicating whether the user can delete the world.
         /// </summary>
-        public bool CanDeleteWorld { get { return GetMaskComparison(256); } }
+        public bool CanDeleteWorld 
+        { 
+            get 
+            { 
+                return GetMaskComparison(256); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can take a backup.
+        /// Gets a value indicating whether the user can take a backup.
         /// </summary>
-        public bool CanTakeBackup { get { return GetMaskComparison(512); } }
+        public bool CanTakeBackup 
+        { 
+            get 
+            { 
+                return GetMaskComparison(512); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can restore from a backup.
+        /// Gets a value indicating whether the user can restore from a backup.
         /// </summary>
         /// <remarks>
         /// The user must also be able to delete the world to restore a backup.
         /// </remarks>
-        public bool CanRestoreBackup { get { return (GetMaskComparison(1024) && CanDeleteWorld); } }
+        public bool CanRestoreBackup 
+        { 
+            get 
+            { 
+                return GetMaskComparison(1024) && CanDeleteWorld; 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can delete a backup.
+        /// Gets a value indicating whether the user can delete a backup.
         /// </summary>
-        public bool CanDeleteBackup { get { return GetMaskComparison(2048); } }
+        public bool CanDeleteBackup 
+        { 
+            get 
+            { 
+                return GetMaskComparison(2048); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can modify the McMyAdmin schedule
+        /// Gets a value indicating whether the user can modify the McMyAdmin schedule
         /// </summary>
-        public bool CanModifySchedule { get { return GetMaskComparison(4096); } }
+        public bool CanModifySchedule 
+        { 
+            get 
+            {
+                return GetMaskComparison(4096); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can update the Minecraft server.
+        /// Gets a value indicating whether the user can update the Minecraft server.
         /// </summary>
         /// <remarks>
         /// The user must also be able to restart the server in order to be able to update the build.
         /// </remarks>
-        public bool CanUpdateMinecraft { get { return (GetMaskComparison(8192) && CanRestartServer); } }
+        public bool CanUpdateMinecraft 
+        { 
+            get 
+            { 
+                return GetMaskComparison(8192) && CanRestartServer; 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can perform diagnostics on the server.
+        /// Gets a value indicating whether the user can perform diagnostics on the server.
         /// </summary>
-        public bool CanPerformDiagnostics { get { return GetMaskComparison(32768); } }
+        public bool CanPerformDiagnostics 
+        { 
+            get 
+            { 
+                return GetMaskComparison(32768); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can access the file manager.
+        /// Gets a value indicating whether the user can access the file manager.
         /// </summary>
-        public bool CanAccessFileManager { get { return GetMaskComparison(65536); } }
+        public bool CanAccessFileManager 
+        { 
+            get 
+            { 
+                return GetMaskComparison(65536); 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can upload files.
+        /// Gets a value indicating whether the user can upload files.
         /// </summary>
-        public bool CanUploadFiles { get { return (GetMaskComparison(131072) && CanAccessFileManager); } }
+        public bool CanUploadFiles 
+        { 
+            get 
+            { 
+                return GetMaskComparison(131072) && CanAccessFileManager; 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can modify files.
+        /// Gets a value indicating whether the user can modify files.
         /// </summary>
-        public bool CanModifyFiles { get { return (GetMaskComparison(262144) && CanAccessFileManager); } }
+        public bool CanModifyFiles 
+        { 
+            get 
+            { 
+                return GetMaskComparison(262144) && CanAccessFileManager; 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can upload executable files.
+        /// Gets a value indicating whether the user can upload executable files.
         /// </summary>
-        public bool CanUploadExecutables{ get { return (GetMaskComparison(524288)  && CanUploadFiles); } }
+        public bool CanUploadExecutables 
+        { 
+            get 
+            { 
+                return GetMaskComparison(524288) && CanUploadFiles; 
+            } 
+        }
 
         /// <summary>
-        /// Gets whether the user can modify the permissions of other McMyAdmin users.
+        /// Gets a value indicating whether the user can modify the permissions of other McMyAdmin users.
         /// </summary>
-        public bool CanModifyOtherMcMyAdminUsers { get { return GetMaskComparison(1048576); } }
+        public bool CanModifyOtherMcMyAdminUsers 
+        { 
+            get 
+            { 
+                return GetMaskComparison(1048576); 
+            } 
+        }
 
         #endregion
 
         #region Private Helper Methods
 
         /// <summary>
-        /// Calculates the bitwise AND operation on the authmask with the provided permission code.
+        /// Calculates the bitwise AND operation on the <see cref="AuthMask"/> with the provided permission code.
         /// </summary>
         /// <param name="permissionCode">Integer that represents a permission.</param>
-        /// <returns><see cref="true"/> if the comparision returns the code, <see cref="false"/> otherwise.</returns>
+        /// <returns><c>true</c> if the comparison returns the code, <c>false</c> otherwise.</returns>
         private bool GetMaskComparison(int permissionCode)
         {
             return (authmask & permissionCode) == permissionCode;

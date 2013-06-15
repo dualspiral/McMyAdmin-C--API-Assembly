@@ -1,8 +1,8 @@
-﻿using McMyAdminAPI.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using McMyAdminAPI.Enums;
 
 namespace McMyAdminAPI.DataTransferObjects
 {
@@ -10,7 +10,7 @@ namespace McMyAdminAPI.DataTransferObjects
     /// Provides general information about the current server status.
     /// </summary>
     /// <remarks>
-    /// Most objects in this struct are nullable, as McMyAdmin does not send all information unless the server is in a running state.
+    /// Most objects in this struct are <see cref="Nullable"/>, as McMyAdmin does not send all information unless the server is in a running state.
     /// </remarks>
     public struct ServerInfo
     {

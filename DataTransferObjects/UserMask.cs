@@ -5,12 +5,15 @@ using System.Text;
 
 namespace McMyAdminAPI.DataTransferObjects
 {
+    /// <summary>
+    /// Structure that contains the UserMask for a <see cref="Player"/>
+    /// </summary>
     public struct UserMask
     {
          #region Private Fields
 
         /// <summary>
-        /// The usermask.
+        /// The <see cref="UserMask"/> numeric representation.
         /// </summary>
         private int usermask;
 
@@ -19,9 +22,9 @@ namespace McMyAdminAPI.DataTransferObjects
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the UserMask structure.
+        /// Initialises a new instance of the <see cref="UserMask"/> structure.
         /// </summary>
-        /// <param name="authmask">The user mask.</param>
+        /// <param name="usermask">The user mask.</param>
         public UserMask(int usermask)
         {
             this.usermask = usermask;
@@ -32,22 +35,28 @@ namespace McMyAdminAPI.DataTransferObjects
         #region Public Properties
 
         /// <summary>
-        /// Gets whether the user can change their password.
+        /// Gets a value indicating whether the user can change their password.
         /// </summary>
         /// <remarks>
-        /// A usermask that has the bit the represents 4 set denotes that they CANNOT change their password.
+        /// A <see cref="UserMask"/> that has the bit the represents 4 set denotes that they CANNOT change their password.
         /// </remarks>
-        public bool CanChangePassword { get { return !GetMaskComparison(4); } }
+        public bool CanChangePassword 
+        { 
+            get 
+            { 
+                return !GetMaskComparison(4); 
+            } 
+        }
 
         #endregion
 
         #region Private Helper Methods
 
         /// <summary>
-        /// Calculates the bitwise AND operation on the authmask with the provided permission code.
+        /// Calculates the bitwise AND operation on the <see cref="UserMask"/> with the provided permission code.
         /// </summary>
         /// <param name="permissionCode">Integer that represents a permission.</param>
-        /// <returns><see cref="true"/> if the comparision returns the code, <see cref="false"/> otherwise.</returns>
+        /// <returns><c>true</c> if the comparison returns the code, <c>false</c> otherwise.</returns>
         private bool GetMaskComparison(int permissionCode)
         {
             return (usermask & permissionCode) == permissionCode;

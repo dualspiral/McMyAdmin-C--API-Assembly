@@ -31,7 +31,7 @@ namespace McMyAdminAPI.DataTransferObjects
         public string Author { get; set; }
 
         /// <summary>
-        /// Gets or sets wether the plugin is enabled or not.
+        /// Gets or sets a value indicating whether the plugin is enabled or not.
         /// </summary>
         public bool IsEnabled { get; set; }
     }

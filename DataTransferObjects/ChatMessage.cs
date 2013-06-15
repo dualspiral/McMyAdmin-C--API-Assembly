@@ -6,7 +6,7 @@ using System.Text;
 namespace McMyAdminAPI.DataTransferObjects
 {
     /// <summary>
-    /// Contains a chat message recieved from the server.
+    /// Contains a chat message received from the server.
     /// </summary>
     public struct ChatMessage : IComparable
     {
@@ -28,12 +28,12 @@ namespace McMyAdminAPI.DataTransferObjects
         public string Message { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the message is a chat message (as determined by McMyAdmin).
+        /// Gets or sets a value indicating whether the message is a chat message (as determined by McMyAdmin).
         /// </summary>
         public bool IsChat { get; set; }
 
         /// <summary>
-        /// Gets or sets the timestamp as recieved by McMyAdmin
+        /// Gets or sets the timestamp as received by McMyAdmin
         /// </summary>
         public long Timestamp { get; set; }
 
@@ -44,8 +44,14 @@ namespace McMyAdminAPI.DataTransferObjects
         /// <summary>
         /// Implementation of the <see cref="IComparable"/> interface. Allows the chat messages to be sorted by Timestamp.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">Object to compare to. Must be of type <see cref="ChatMessage"/>, or this call will throw an <see cref="InvalidCastException"/>.</param>
+        /// <returns>An <see cref="int"/> to indicate the relative position of this object with regards to <paramref name="obj"/>.
+        /// <list>
+        /// <item>A negative value indicates that this object precedes <paramref name="obj"/></item>
+        /// <item>A zero value indicates <paramref name="obj"/> has the same rank</item>
+        /// <item>A postitive value indicates that this object succeeds <paramref name="obj"/></item>
+        /// </list>
+        /// </returns>
         public int CompareTo(object obj)
         {
             // If the object we are comparing to isn't actually there, return 1.

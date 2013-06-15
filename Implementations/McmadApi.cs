@@ -1,22 +1,29 @@
-﻿using McMyAdminAPI.DataTransferObjects;
-using McMyAdminAPI.Exceptions;
-using McMyAdminAPI.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using McMyAdminAPI.DataTransferObjects;
+using McMyAdminAPI.Exceptions;
+using McMyAdminAPI.Interfaces;
 
 namespace McMyAdminAPI.Implementations
 {
     /// <summary>
-    /// Implemenation of the <see cref="IMcmadApi"/> class. Allows the user to access the McMyAdmin API.
+    /// Implementation of the <see cref="IMcmadApi"/> class. Allows the user to access the McMyAdmin API.
     /// </summary>
     internal class McmadApi : IMcmadApi
     {
         #region Private Fields
+
+        /// <summary>
+        /// The server URL.
+        /// </summary>
+        /// <remarks>
+        /// Once this is set by the constructor, this cannot be altered.
+        /// </remarks>
+        private readonly string serverurl;
 
         /// <summary>
         /// The session token.
@@ -27,14 +34,6 @@ namespace McMyAdminAPI.Implementations
         /// Cookies to be held between API calls.
         /// </summary>
         private CookieCollection cookies = new CookieCollection();
-
-        /// <summary>
-        /// The server URL.
-        /// </summary>
-        /// <remarks>
-        /// Once this is set by the constructor, this cannot be altered.
-        /// </remarks>
-        private readonly string serverurl;
 
         #endregion
 
@@ -54,7 +53,7 @@ namespace McMyAdminAPI.Implementations
         #region IMcmadApi
 
         /// <summary>
-        /// Gets whether the user has successfully logged in.
+        /// Gets a value indicating whether the user has successfully logged in.
         /// </summary>
         public bool IsLoggedIn
         {
@@ -90,7 +89,7 @@ namespace McMyAdminAPI.Implementations
         /// </summary>
         /// <param name="username">Username to log in with.</param>
         /// <param name="password">Password to log in with.</param>
-        /// <returns><see cref="true"/> if the user was able to log in, <see cref="false"/> if it failed.</returns>
+        /// <returns><c>true</c> if the user was able to log in, <c>false</c> if it failed.</returns>
         public bool Login(string username, string password)
         {
             throw new NotImplementedException();
@@ -99,7 +98,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Logout from the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool Logout()
         {
             throw new NotImplementedException();
@@ -110,7 +109,7 @@ namespace McMyAdminAPI.Implementations
         /// </summary>
         /// <param name="oldpassword">Current password.</param>
         /// <param name="newpassword">Password to change it to.</param>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool ChangePassword(string oldpassword, string newpassword)
         {
             throw new NotImplementedException();
@@ -119,7 +118,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Starts the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool StartServer()
         {
             throw new NotImplementedException();
@@ -128,7 +127,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Stops the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool StopServer()
         {
             throw new NotImplementedException();
@@ -137,7 +136,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Restarts the server.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool RestartServer()
         {
             throw new NotImplementedException();
@@ -146,7 +145,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Kill the server, immediately terminating the process and potentially losing data.
         /// </summary>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool KillServer()
         {
             throw new NotImplementedException();
@@ -160,7 +159,7 @@ namespace McMyAdminAPI.Implementations
         /// However, if someone tries to connect, McMyAdmin will restart the server, 
         /// and ask the player to try to reconnect in a few seconds.
         /// </remarks>
-        /// <returns><see cref="true"/> if successful.</returns>
+        /// <returns><c>true</c> if successful.</returns>
         public bool SleepServer()
         {
             throw new NotImplementedException();
@@ -169,7 +168,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Retrieves the latest chat messages from the server.
         /// </summary>   
-        /// <param name="timestamp">The earlist timestamp to get. Defaults to -1, whic means get all Chat Messages in the server buffer.</param>
+        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
         /// <returns>
         /// An <see cref="IList"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
         /// in the McMyAdmin server with a timestamp greater than the one specified.
@@ -189,7 +188,7 @@ namespace McMyAdminAPI.Implementations
         }
 
         /// <summary>
-        /// Retrives a list of plugins in use on the server.
+        /// Retrieves a list of plugins in use on the server.
         /// </summary>
         /// <returns>An <see cref="IList"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
         public IList<ServerPlugin> GetPlugins()
@@ -213,8 +212,10 @@ namespace McMyAdminAPI.Implementations
         #region Private Methods
 
         /// <summary>
-        /// Queires the server.
+        /// Queries the server.
         /// </summary>
+        /// <param name="apimethod">Api method to call.</param>
+        /// <param name="parameters">A key-value set of parameters to call.</param>
         /// <returns>String containing the server response.</returns>
         private string Query(string apimethod, IDictionary<string, string> parameters)
         {
@@ -225,8 +226,8 @@ namespace McMyAdminAPI.Implementations
             // Add any parameters we have.
             foreach (string key in parameters.Keys)
             {
-                string a = EscapeString(key);
-                string b = EscapeString(parameters[key]);
+                string a = this.EscapeString(key);
+                string b = this.EscapeString(parameters[key]);
 
                 query.AppendFormat("&{0}={1}", a, b);
             }
@@ -238,16 +239,16 @@ namespace McMyAdminAPI.Implementations
             Uri requestUri = new Uri(string.Format("{0}{1}", ServerURL, query.ToString()));
 
             // Fix any spaces.
-            ForceCanonicalPathAndQuery(requestUri);
+            this.ForceCanonicalPathAndQuery(requestUri);
 
             // Create the request
             HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
 
             // Add the cookies to the request.
             request.CookieContainer = new CookieContainer();
-            if (cookies.Count != 0)
+            if (this.cookies.Count != 0)
             {
-                foreach (Cookie a in cookies)
+                foreach (Cookie a in this.cookies)
                 {
                     request.CookieContainer.Add(a);
                 }
@@ -269,7 +270,7 @@ namespace McMyAdminAPI.Implementations
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new FailedApiCallException(String.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null);
+                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null);
                     }
 
                     // Set the cookies to be sent next time.
@@ -292,7 +293,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Method to force use of %2F in URLs (Thanks to http://stackoverflow.com/questions/781205/getting-a-url-with-an-url-encoded-slash)
         /// </summary>
-        /// <param name="uri"></param>
+        /// <param name="uri"><see cref="Uri"/> that contains the request to be made.</param>
         private void ForceCanonicalPathAndQuery(Uri uri)
         {
             string paq = uri.PathAndQuery; // need to access PathAndQuery
@@ -312,7 +313,7 @@ namespace McMyAdminAPI.Implementations
             // Try to escape it.
             string escaped = Uri.EscapeUriString(toEscape);
 
-            //The above method doesn't seem to escape properly...
+            // The above method doesn't seem to escape properly...
             escaped = escaped.Replace("/", "%2F");
             escaped = escaped.Replace("&", "%26");
             escaped = escaped.Replace("?", "%3F");
