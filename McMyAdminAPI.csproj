@@ -54,6 +54,7 @@
     <Compile Include="Exceptions\NotLoggedInException.cs" />
     <Compile Include="GetApiInstance.cs" />
     <Compile Include="Implementations\McmadApi.cs" />
+    <Compile Include="Implementations\ServerCaller.cs" />
     <Compile Include="Interfaces\IMcmadApi.cs" />
     <Compile Include="DataTransferObjects\ChatMessage.cs" />
     <Compile Include="DataTransferObjects\ServerInfo.cs" />

@@ -26,12 +26,12 @@ namespace McMyAdminAPI.Interfaces
         /// <summary>
         /// Gets a value indicating the Authorisation Mask for the logged in user.
         /// </summary>
-        AuthMask AuthMask { get; }
+        AuthMask AuthorisationMask { get; }
 
         /// <summary>
         /// Gets a value indicating the User Mask for the currently logged in user.
         /// </summary>
-        UserMask UserMask { get; }
+        UserMask UserPermissionMask { get; }
 
         #endregion
 

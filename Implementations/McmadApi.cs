@@ -18,34 +18,21 @@ namespace McMyAdminAPI.Implementations
         #region Private Fields
 
         /// <summary>
-        /// The server URL.
+        /// The class that makes calls to the server.
         /// </summary>
-        /// <remarks>
-        /// Once this is set by the constructor, this cannot be altered.
-        /// </remarks>
-        private readonly string serverurl;
-
-        /// <summary>
-        /// The session token.
-        /// </summary>
-        private string sessionToken = string.Empty;
-
-        /// <summary>
-        /// Cookies to be held between API calls.
-        /// </summary>
-        private CookieCollection cookies = new CookieCollection();
+        private readonly ServerCaller servercaller;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initialises a new instance of the McmadApi class.
+        /// Initialises a new instance of the <see cref="McmadApi"/> class.
         /// </summary>
         /// <param name="serverurl">URL of Server to call.</param>
         internal McmadApi(string serverurl) 
         {
-            this.serverurl = serverurl;
+            this.servercaller = new ServerCaller(serverurl);
         }
 
         #endregion
@@ -57,21 +44,27 @@ namespace McMyAdminAPI.Implementations
         /// </summary>
         public bool IsLoggedIn
         {
-            get; private set;
+            get
+            {
+                return servercaller.IsLoggedIn;
+            }
         }
 
         /// <summary>
-        /// Gets the server URL for the server that this instance is calling.
+        /// Gets the server URL for the server that this instance is calling as a <see cref="string"/>.
         /// </summary>
         public string ServerURL
         {
-            get { return serverurl; }
+            get 
+            { 
+                return servercaller.ServerURL; 
+            }
         }
 
         /// <summary>
         /// Gets the Authorisation Mask for the logged in user.
         /// </summary>
-        public AuthMask AuthMask
+        public AuthMask AuthorisationMask
         {
             get; private set;
         }
@@ -79,7 +72,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Gets the User Mask for the logged in user.
         /// </summary>
-        public UserMask UserMask
+        public UserMask UserPermissionMask
         {
             get; private set;
         }
@@ -101,6 +94,7 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool Logout()
         {
+            CheckLoggedIn();
             throw new NotImplementedException();
         }
 
@@ -112,6 +106,8 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool ChangePassword(string oldpassword, string newpassword)
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanChangePassword");
             throw new NotImplementedException();
         }
 
@@ -121,6 +117,8 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool StartServer()
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanStartServer");
             throw new NotImplementedException();
         }
 
@@ -130,6 +128,8 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool StopServer()
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanStopServer");
             throw new NotImplementedException();
         }
 
@@ -139,6 +139,8 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool RestartServer()
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanRestartServer");
             throw new NotImplementedException();
         }
 
@@ -148,6 +150,8 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool KillServer()
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanStopServer");
             throw new NotImplementedException();
         }
 
@@ -162,6 +166,8 @@ namespace McMyAdminAPI.Implementations
         /// <returns><c>true</c> if successful.</returns>
         public bool SleepServer()
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanStopServer");
             throw new NotImplementedException();
         }
 
@@ -175,6 +181,8 @@ namespace McMyAdminAPI.Implementations
         /// </returns>
         public IList<ChatMessage> GetChat(long timestamp = -1)
         {
+            CheckLoggedIn();
+            CheckUserPermissionsForMethod("CanAccessConsole");
             throw new NotImplementedException();
         }
 
@@ -184,6 +192,7 @@ namespace McMyAdminAPI.Implementations
         /// <returns><see cref="ServerInfo"/> object containing the server information.</returns>
         public ServerInfo GetStatus()
         {
+            CheckLoggedIn();
             throw new NotImplementedException();
         }
 
@@ -193,6 +202,7 @@ namespace McMyAdminAPI.Implementations
         /// <returns>An <see cref="IList"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
         public IList<ServerPlugin> GetPlugins()
         {
+            CheckLoggedIn();
             throw new NotImplementedException();
         }
 
@@ -212,115 +222,39 @@ namespace McMyAdminAPI.Implementations
         #region Private Methods
 
         /// <summary>
-        /// Queries the server.
+        /// Utility method to check if a user is logged in. If not, throws a <see cref="NotLoggedInException"/>
         /// </summary>
-        /// <param name="apimethod">Api method to call.</param>
-        /// <param name="parameters">A key-value set of parameters to call.</param>
-        /// <returns>String containing the server response.</returns>
-        private string Query(string apimethod, IDictionary<string, string> parameters)
+        private void CheckLoggedIn()
         {
-            // Build the query string.
-            StringBuilder query = new StringBuilder("/data.json?req=");
-            query.Append(apimethod);
-
-            // Add any parameters we have.
-            foreach (string key in parameters.Keys)
+            // If we are not logged in, throw the exception.
+            if (!this.servercaller.IsLoggedIn)
             {
-                string a = this.EscapeString(key);
-                string b = this.EscapeString(parameters[key]);
-
-                query.AppendFormat("&{0}={1}", a, b);
-            }
-
-            // Add the session token.
-            query.AppendFormat("&MCMASESSIONID={0}", sessionToken);
-
-            // Create the URL to request from.
-            Uri requestUri = new Uri(string.Format("{0}{1}", ServerURL, query.ToString()));
-
-            // Fix any spaces.
-            this.ForceCanonicalPathAndQuery(requestUri);
-
-            // Create the request
-            HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
-
-            // Add the cookies to the request.
-            request.CookieContainer = new CookieContainer();
-            if (this.cookies.Count != 0)
-            {
-                foreach (Cookie a in this.cookies)
-                {
-                    request.CookieContainer.Add(a);
-                }
-            }
-
-            // We require this header to get the response we want.
-            request.Accept = "text/javascript";
-
-            // We need a user agent.
-            request.UserAgent = "McMyAdminApiForDotNet";
-
-            // Set the time out!
-            request.Timeout = 5000;
-
-            try
-            {
-                // Make the request
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null);
-                    }
-
-                    // Set the cookies to be sent next time.
-                    cookies = response.Cookies;
-
-                    // Get the text response.
-                    StreamReader httpReponse = new StreamReader(response.GetResponseStream(), true);
-
-                    // Return it.
-                    return httpReponse.ReadToEnd();
-                }
-            }
-            catch (WebException e)
-            {
-                // If we failed, throw the failed exception with the inner exception set to what cause this to fail.
-                throw new FailedApiCallException("The API failed to make the call.", e);
+                throw new NotLoggedInException("No session ID. You must login before you can use this method.", null);
             }
         }
 
         /// <summary>
-        /// Method to force use of %2F in URLs (Thanks to http://stackoverflow.com/questions/781205/getting-a-url-with-an-url-encoded-slash)
+        /// Utility method to check if a user has permissions for the requested method using the <see cref="AuthorisationMask"/>. If not, throws a <see cref="NoPermissionException"/>
         /// </summary>
-        /// <param name="uri"><see cref="Uri"/> that contains the request to be made.</param>
-        private void ForceCanonicalPathAndQuery(Uri uri)
+        private void CheckAuthMaskPermissionsForMethod(string permissions)
         {
-            string paq = uri.PathAndQuery; // need to access PathAndQuery
-            FieldInfo flagsFieldInfo = typeof(Uri).GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
-            ulong flags = (ulong)flagsFieldInfo.GetValue(uri);
-            flags &= ~((ulong)0x30); // Flags.PathNotCanonical|Flags.QueryNotCanonical
-            flagsFieldInfo.SetValue(uri, flags);
+            // If we are not logged in, throw the exception.
+            if ((bool)typeof(AuthMask).GetProperty(permissions).GetValue(this.AuthorisationMask, null))
+            {
+                throw new NoPermissionException("No permssions for this method. Please contact your server admin if you believe this is in error.", null);
+            }
         }
 
         /// <summary>
-        /// Escapes a string using Uri encoding
+        /// Utility method to check if a user has permissions for the requested method using the <see cref="UserPermissionsMask"/>. If not, throws a <see cref="NoPermissionException"/>
         /// </summary>
-        /// <param name="toEscape">String to escape.</param>
-        /// <returns>Escaped string.</returns>
-        private string EscapeString(string toEscape)
+        private void CheckUserPermissionsForMethod(string permissions)
         {
-            // Try to escape it.
-            string escaped = Uri.EscapeUriString(toEscape);
-
-            // The above method doesn't seem to escape properly...
-            escaped = escaped.Replace("/", "%2F");
-            escaped = escaped.Replace("&", "%26");
-            escaped = escaped.Replace("?", "%3F");
-            escaped = escaped.Replace("=", "%3D");
-            escaped = escaped.Replace("#", "%23");
-
-            return escaped;
+            // If we are not logged in, throw the exception.
+            if ((bool)typeof(UserMask).GetProperty(permissions).GetValue(this.AuthorisationMask, null))
+            {
+                throw new NoPermissionException("No permssions for this method - failed check " + permissions + ". Please contact your server admin if you believe this is in error.", null);
+            }
         }
 
         #endregion
