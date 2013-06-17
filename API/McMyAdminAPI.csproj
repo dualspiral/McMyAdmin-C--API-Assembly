@@ -58,6 +58,7 @@
     <Compile Include="Interfaces\IMcmadApi.cs" />
     <Compile Include="DataTransferObjects\ChatMessage.cs" />
     <Compile Include="DataTransferObjects\ServerInfo.cs" />
+    <Compile Include="Interfaces\IServerCaller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

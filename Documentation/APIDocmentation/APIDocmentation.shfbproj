@@ -20,7 +20,7 @@
     <HtmlHelpName>APIDocmentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\McMyAdminAPI.csproj" xmlns="" />
+      <DocumentationSource sourceFile="..\..\API\McMyAdminAPI.csproj" xmlns="" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, MSHelpViewer, Website</HelpFileFormat>
@@ -128,7 +128,7 @@ This software is not complete and is subject to change.
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\McMyAdminAPI.csproj">
+    <ProjectReference Include="..\..\API\McMyAdminAPI.csproj">
       <Name>McMyAdminAPI</Name>
       <Project>{ac7e74da-72b9-4c1d-9677-693461dcf851}</Project>
       <Private>True</Private>

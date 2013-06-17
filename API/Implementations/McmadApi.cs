@@ -20,7 +20,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// The class that makes calls to the server.
         /// </summary>
-        private readonly ServerCaller servercaller;
+        private readonly IServerCaller servercaller;
 
         #endregion
 
@@ -29,10 +29,10 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Initialises a new instance of the <see cref="McmadApi"/> class.
         /// </summary>
-        /// <param name="serverurl">URL of Server to call.</param>
-        internal McmadApi(string serverurl) 
+        /// <param name="servercaller">The <see cref="IServerCaller"/> to use.</param>
+        internal McmadApi(IServerCaller servercaller) 
         {
-            this.servercaller = new ServerCaller(serverurl);
+            this.servercaller = servercaller;
         }
 
         #endregion

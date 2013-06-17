@@ -1,4 +1,5 @@
 ﻿using McMyAdminAPI.Exceptions;
+using McMyAdminAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ namespace McMyAdminAPI.Implementations
     /// <remarks>
     /// This class should not be exposed outside of the assembly.
     /// </remarks>
-    internal class ServerCaller
+    internal class ServerCaller : IServerCaller
     {
         #region Private Fields
 
@@ -91,15 +92,17 @@ namespace McMyAdminAPI.Implementations
             // Build the query string.
             StringBuilder query = new StringBuilder("/data.json?req=").Append(apimethod);
 
-            // Add any parameters we have.
-            foreach (string key in parameters.Keys)
+            if (parameters != null)
             {
-                string a = this.EscapeString(key);
-                string b = this.EscapeString(parameters[key]);
+                // Add any parameters we have. Don't include the MCMASESSIONID.
+                foreach (string key in parameters.Keys.Where(x => x.ToUpperInvariant() != "MCMASESSIONID"))
+                {
+                    string a = this.EscapeString(key);
+                    string b = this.EscapeString(parameters[key]);
 
-                query.AppendFormat("&{0}={1}", a, b);
+                    query.AppendFormat("&{0}={1}", a, b);
+                }
             }
-
             // Add the session token.
             query.AppendFormat("&MCMASESSIONID={0}", sessionToken);
 

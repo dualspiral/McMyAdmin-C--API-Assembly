@@ -19,7 +19,7 @@ namespace McMyAdminAPI
         /// <returns><see cref="IMcmadApi"/> interface that encapsulates the API.</returns>
         public static IMcmadApi GetInstance(string serverURL)
         {
-            return new McmadApi(serverURL);
+            return new McmadApi(new ServerCaller(serverURL));
         }
     }
 }
