@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AC7E74DA-72B9-4C1D-9677-693461DCF851}</ProjectGuid>
+    <ProjectGuid>{6EB03B53-125C-471E-8E68-63F7DC4F1C0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>McMyAdminAPI</RootNamespace>
-    <AssemblyName>McMyAdminAPI</AssemblyName>
+    <RootNamespace>McMyAdminAPI.NUnitTests</RootNamespace>
+    <AssemblyName>McMyAdminAPI.NUnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -23,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\McMyAdminAPI.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,8 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,28 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataTransferObjects\AuthMask.cs" />
-    <Compile Include="DataTransferObjects\Player.cs" />
-    <Compile Include="DataTransferObjects\ServerPlugin.cs" />
-    <Compile Include="DataTransferObjects\UserMask.cs" />
-    <Compile Include="Enums\ServerStatus.cs" />
-    <Compile Include="Exceptions\FailedApiCallException.cs" />
-    <Compile Include="Exceptions\NoPermissionException.cs" />
-    <Compile Include="Exceptions\NotLoggedInException.cs" />
-    <Compile Include="GetApiInstance.cs" />
-    <Compile Include="Implementations\McmadApi.cs" />
-    <Compile Include="Implementations\ServerCaller.cs" />
-    <Compile Include="Interfaces\IMcmadApi.cs" />
-    <Compile Include="DataTransferObjects\ChatMessage.cs" />
-    <Compile Include="DataTransferObjects\ServerInfo.cs" />
-    <Compile Include="Interfaces\IServerCaller.cs" />
-    <Compile Include="JsonObjects\LoginJson.cs" />
+    <Compile Include="APITests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\API\McMyAdminAPI.csproj">
+      <Project>{ac7e74da-72b9-4c1d-9677-693461dcf851}</Project>
+      <Name>McMyAdminAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -75,7 +68,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <StyleCopMSBuildTargetsFile>..\packages\StyleCop.MSBuild.4.7.44.1\tools\StyleCop.targets</StyleCopMSBuildTargetsFile>
   </PropertyGroup>

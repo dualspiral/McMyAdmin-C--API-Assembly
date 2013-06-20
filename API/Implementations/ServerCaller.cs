@@ -29,11 +29,6 @@ namespace McMyAdminAPI.Implementations
         private readonly string serverurl;
 
         /// <summary>
-        /// The session token.
-        /// </summary>
-        private string sessionToken = string.Empty;
-
-        /// <summary>
         /// Cookies to be held between API calls.
         /// </summary>
         private CookieCollection cookies = new CookieCollection();
@@ -53,23 +48,12 @@ namespace McMyAdminAPI.Implementations
 
         #endregion
 
-        #region Internal Properties
-
-        /// <summary>
-        /// Gets a value indicating whether the user has a SessionID and is therefore logged in.
-        /// </summary>
-        internal bool IsLoggedIn
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(sessionToken);
-            }
-        }
+        #region Public Properties
 
         /// <summary>
         /// Gets the Server Url as a <see cref="string"/>.
         /// </summary>
-        internal string ServerURL
+        public string ServerURL
         {
             get
             {
@@ -77,9 +61,18 @@ namespace McMyAdminAPI.Implementations
             }
         }
 
+        /// <summary>
+        /// Gets or sets the Session Token to use.
+        /// </summary>
+        public string SessionToken
+        {
+            get;
+            set;
+        }
+
         #endregion
 
-        #region Internal Methods
+        #region Public Methods
 
         /// <summary>
         /// Queries the server.
@@ -87,7 +80,7 @@ namespace McMyAdminAPI.Implementations
         /// <param name="apimethod">Api method to call.</param>
         /// <param name="parameters">A key-value set of parameters to call.</param>
         /// <returns>String containing the server response.</returns>
-        internal string Query(string apimethod, IDictionary<string, string> parameters)
+        public string Query(string apimethod, IDictionary<string, string> parameters)
         {
             // Build the query string.
             StringBuilder query = new StringBuilder("/data.json?req=").Append(apimethod);
@@ -104,7 +97,7 @@ namespace McMyAdminAPI.Implementations
                 }
             }
             // Add the session token.
-            query.AppendFormat("&MCMASESSIONID={0}", sessionToken);
+            query.AppendFormat("&MCMASESSIONID={0}", SessionToken);
 
             // Create the URL to request from.
             Uri requestUri = new Uri(string.Format("{0}{1}", serverurl, query.ToString()));

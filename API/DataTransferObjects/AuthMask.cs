@@ -35,6 +35,14 @@ namespace McMyAdminAPI.DataTransferObjects
         #region Public Properties
 
         /// <summary>
+        /// Gets the user authmask
+        /// </summary>
+        public int GetRawAuthMask
+        {
+            get { return authmask; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the user can stop and kill the server.
         /// </summary>
         public bool CanStopServer

@@ -10,7 +10,7 @@ namespace McMyAdminAPI.DataTransferObjects
     /// </summary>
     public struct UserMask
     {
-         #region Private Fields
+        #region Private Fields
 
         /// <summary>
         /// The <see cref="UserMask"/> numeric representation.
@@ -33,6 +33,14 @@ namespace McMyAdminAPI.DataTransferObjects
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets the user authmask
+        /// </summary>
+        public int GetRawUserMask
+        {
+            get { return usermask; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the user can change their password.

@@ -8,19 +8,19 @@ namespace McMyAdminAPI.Interfaces
     /// <summary>
     /// Makes API calls to the server.
     /// </summary>
-    interface IServerCaller
+    public interface IServerCaller
     {
         #region Properties
-
-        /// <summary>
-        /// Gets a value indicating whether the user has a SessionID and is therefore logged in.
-        /// </summary>
-        bool IsLoggedIn { get; }
            
         /// <summary>
         /// Gets the Server Url as a <see cref="string"/>.
         /// </summary>
         string ServerURL { get; }
+
+        /// <summary>
+        /// Gets or sets the Session Token.
+        /// </summary>
+        string SessionToken { get; set; }
 
         #endregion
 

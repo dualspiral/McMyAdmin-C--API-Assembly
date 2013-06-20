@@ -7,13 +7,15 @@ using System.Text;
 using McMyAdminAPI.DataTransferObjects;
 using McMyAdminAPI.Exceptions;
 using McMyAdminAPI.Interfaces;
+using McMyAdminAPI.JsonObjects;
+using Newtonsoft.Json;
 
 namespace McMyAdminAPI.Implementations
 {
     /// <summary>
     /// Implementation of the <see cref="IMcmadApi"/> class. Allows the user to access the McMyAdmin API.
     /// </summary>
-    internal class McmadApi : IMcmadApi
+    public class McmadApi : IMcmadApi
     {
         #region Private Fields
 
@@ -30,7 +32,7 @@ namespace McMyAdminAPI.Implementations
         /// Initialises a new instance of the <see cref="McmadApi"/> class.
         /// </summary>
         /// <param name="servercaller">The <see cref="IServerCaller"/> to use.</param>
-        internal McmadApi(IServerCaller servercaller) 
+        public McmadApi(IServerCaller servercaller)
         {
             this.servercaller = servercaller;
         }
@@ -46,7 +48,7 @@ namespace McMyAdminAPI.Implementations
         {
             get
             {
-                return servercaller.IsLoggedIn;
+                return string.IsNullOrEmpty(servercaller.SessionToken);
             }
         }
 
@@ -55,9 +57,9 @@ namespace McMyAdminAPI.Implementations
         /// </summary>
         public string ServerURL
         {
-            get 
-            { 
-                return servercaller.ServerURL; 
+            get
+            {
+                return servercaller.ServerURL;
             }
         }
 
@@ -66,7 +68,8 @@ namespace McMyAdminAPI.Implementations
         /// </summary>
         public AuthMask AuthorisationMask
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -74,7 +77,8 @@ namespace McMyAdminAPI.Implementations
         /// </summary>
         public UserMask UserPermissionMask
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -83,9 +87,39 @@ namespace McMyAdminAPI.Implementations
         /// <param name="username">Username to log in with.</param>
         /// <param name="password">Password to log in with.</param>
         /// <returns><c>true</c> if the user was able to log in, <c>false</c> if it failed.</returns>
+        /// <remarks>
+        /// This call will throw a <see cref="FailedApiCallException"/> if the call failed for any other reason than an incorrect login.
+        /// </remarks>
         public bool Login(string username, string password)
         {
-            throw new NotImplementedException();
+            string response;
+
+            // Make the login request. This 
+            response = servercaller.Query("login", new Dictionary<string, string> { { "username", username }, { "password", password }, { "token", string.Empty } });
+
+            // Use our LoginJson helper object to deserialize the JSON
+            LoginJson jsonResult = JsonConvert.DeserializeObject<LoginJson>(response);
+
+            // Get the success paramter out.
+            if (!jsonResult.Success)
+            {
+                // If the error code was 403 (Forbidden), return false.
+                if (jsonResult.Status == 403)
+                {
+                    return false;
+                }
+
+                // Otherwise, we throw a FailedApiException - as it is a server error.
+                throw new FailedApiCallException(string.Format("Server returned an error code of {0}", jsonResult.Status.ToString()), null);
+            }
+
+            // We know we have logged in - set all the fields!
+            servercaller.SessionToken = jsonResult.SessionToken;
+            AuthorisationMask = new AuthMask(jsonResult.AuthMask);
+            UserPermissionMask = new UserMask(jsonResult.UserMask);
+
+            // We have logged in.
+            return true;
         }
 
         /// <summary>
@@ -95,7 +129,11 @@ namespace McMyAdminAPI.Implementations
         public bool Logout()
         {
             CheckLoggedIn();
-            throw new NotImplementedException();
+            string response = servercaller.Query("logout", null);
+            servercaller.SessionToken = null;
+
+            // We have lost the session anyway, so return true.
+            return true;
         }
 
         /// <summary>
@@ -227,7 +265,7 @@ namespace McMyAdminAPI.Implementations
         private void CheckLoggedIn()
         {
             // If we are not logged in, throw the exception.
-            if (!this.servercaller.IsLoggedIn)
+            if (!this.IsLoggedIn)
             {
                 throw new NotLoggedInException("No session ID. You must login before you can use this method.", null);
             }
