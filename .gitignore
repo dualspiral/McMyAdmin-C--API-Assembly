@@ -1,6 +1,8 @@
 bin
 obj
-/Documentation/APIDocumentation/Help/*
 /*.suo
-
 *.Cache
+/Documentation/APIDocmentation/Help
+
+/Documentation/APIDocmentation/APIDocmentation.shfbproj_Daniel
+/Documentation/APIDocmentation/APIDocmentation.v11.suo
