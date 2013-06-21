@@ -146,7 +146,24 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanChangePassword");
-            throw new NotImplementedException();
+
+            // As we only get a status back, a dynamic object will suffice.
+            string response = servercaller.Query("ChangePassword", new Dictionary<string, string> { {"OldPassword", oldpassword }, { "NewPassword", newpassword } });
+            dynamic json = JsonConvert.DeserializeObject(response);
+
+            // HTTP 200 -> OK
+            if ((int)(json.status) == 200)
+            {
+                return true;
+            }
+            // HTTP 403 -> Forbidden
+            else if ((int)(json.status) == 403)
+            {
+                return false;
+            }
+            
+            // Server error
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", (json.status).ToString()), null);
         }
 
         /// <summary>
