@@ -30,11 +30,11 @@ namespace McMyAdminAPI.NUnitTests
             // Register the Api with the mock server caller.
             IMcmadApi api = new McmadApi(mockServerCaller.Object);
 
-            // Verify we called the Query method.
-            mockServerCaller.Verify(c => c.Query("login", It.IsAny<Dictionary<string, string>>()), Times.Once());
-
             // Call the login command, and assert that it is successful.
             Assert.True(api.Login("username", "password"), "The login method did not return true as expected");
+
+            // Verify we called the Query method.
+            mockServerCaller.Verify(c => c.Query("login", It.IsAny<Dictionary<string, string>>()), Times.Once());
 
             // Check the UserMask is zero
             Assert.AreEqual(0, api.UserPermissionMask.GetRawUserMask, "The UserMask was not set to what it was expected to be!");
@@ -43,7 +43,7 @@ namespace McMyAdminAPI.NUnitTests
             Assert.AreEqual(1081247, api.AuthorisationMask.GetRawAuthMask, "The AuthorisationMask was not set to what it was expected to be!");
 
             // Check we set the session token
-            mockServerCaller.VerifySet(c => c.SessionToken == "00000000-0000-0000-0000-000000000000", "The session token was not set as expected");
+            mockServerCaller.VerifySet(c => c.SessionToken = "00000000-0000-0000-0000-000000000000", "The session token was not set as expected");
         }
     }
 }
