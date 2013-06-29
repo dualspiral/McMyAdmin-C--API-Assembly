@@ -129,7 +129,7 @@ namespace McMyAdminAPI.Implementations
         public bool Logout()
         {
             CheckLoggedIn();
-            string response = servercaller.Query("logout", null);
+            servercaller.Query("logout", null);
             servercaller.SessionToken = null;
 
             // We have lost the session anyway, so return true.

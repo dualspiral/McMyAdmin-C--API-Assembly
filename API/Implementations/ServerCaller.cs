@@ -164,7 +164,7 @@ namespace McMyAdminAPI.Implementations
         /// <param name="uri"><see cref="Uri"/> that contains the request to be made.</param>
         private void ForceCanonicalPathAndQuery(Uri uri)
         {
-            string paq = uri.PathAndQuery; // need to access PathAndQuery
+            // string paq = uri.PathAndQuery; // need to access PathAndQuery
             FieldInfo flagsFieldInfo = typeof(Uri).GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
             ulong flags = (ulong)flagsFieldInfo.GetValue(uri);
             flags &= ~((ulong)0x30); // Flags.PathNotCanonical|Flags.QueryNotCanonical
