@@ -226,8 +226,7 @@ namespace McMyAdminAPI.Implementations
         /// </summary>   
         /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
         /// <returns>
-        /// An <see cref="IList"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
-        /// in the McMyAdmin server with a timestamp greater than the one specified.
+        /// An <see cref="IList{ChatMessage}"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
         /// </returns>
         public IList<ChatMessage> GetChat(long timestamp = -1)
         {
@@ -260,11 +259,11 @@ namespace McMyAdminAPI.Implementations
         /// Perform a call on the API and retrieve the JSON serialised as a string.
         /// </summary>
         /// <param name="apimethod">API method to call.</param>
-        /// <param name="parameters">Key-value pairs of the method call parameters.</param>
+        /// <param name="parameters">Key-value pairs of the method call parameters. Can be <c>null</c>.</param>
         /// <returns><see cref="string"/> containing the JSON response.</returns>
         public string MakeRawCall(string apimethod, IDictionary<string, string> parameters)
         {
-            throw new NotImplementedException();
+            return servercaller.Query(apimethod, parameters);
         }
 
         #endregion
