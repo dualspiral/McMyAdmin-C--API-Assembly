@@ -1,21 +1,25 @@
-﻿using System;
+﻿// <copyright file="McmadApi.cs">
+// Copyright (c) 2013. Licensed under the MIT License.
+// <author>Dr Daniel Naylor</author>
+// </copyright>
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Text;
+using System.Runtime.CompilerServices;
 using McMyAdminAPI.DataTransferObjects;
 using McMyAdminAPI.Exceptions;
 using McMyAdminAPI.Interfaces;
 using McMyAdminAPI.JsonObjects;
 using Newtonsoft.Json;
 
+// This class should be visible to the Unit Test project.
+[assembly: InternalsVisibleTo("McMyAdminAPI.NUnitTests")]
+
 namespace McMyAdminAPI.Implementations
 {
     /// <summary>
     /// Implementation of the <see cref="IMcmadApi"/> class. Allows the user to access the McMyAdmin API.
     /// </summary>
-    public class McmadApi : IMcmadApi
+    internal class McmadApi : IMcmadApi
     {
         #region Private Fields
 
@@ -226,7 +230,7 @@ namespace McMyAdminAPI.Implementations
         /// </summary>   
         /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
         /// <returns>
-        /// An <see cref="IList{ChatMessage}"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
+        /// An <see cref="IList{ChatMessage}"/> of <see cref="ChatMessage"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
         /// </returns>
         public IList<ChatMessage> GetChat(long timestamp = -1)
         {
@@ -248,7 +252,7 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Retrieves a list of plugins in use on the server.
         /// </summary>
-        /// <returns>An <see cref="IList"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
+        /// <returns>An <see cref="IList{ServerPlugin}"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
         public IList<ServerPlugin> GetPlugins()
         {
             CheckLoggedIn();

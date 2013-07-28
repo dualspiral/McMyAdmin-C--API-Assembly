@@ -1,4 +1,8 @@
-﻿using McMyAdminAPI.Exceptions;
+﻿// <copyright file="ServerCaller.cs">
+// Copyright (c) 2013. Licensed under the MIT License.
+// <author>Dr Daniel Naylor</author>
+// </copyright>
+using McMyAdminAPI.Exceptions;
 using McMyAdminAPI.Interfaces;
 using System;
 using System.Collections.Generic;
