@@ -32,7 +32,7 @@ namespace McMyAdminAPI.Interfaces
         /// <param name="apimethod">Api method to call.</param>
         /// <param name="parameters">A key-value set of parameters to call.</param>
         /// <returns>String containing the server response.</returns>
-        string Query(string apimethod, IDictionary<string, string> parameters);
+        string Query(string apimethod, IDictionary<string, string> parameters = null);
 
         #endregion
     }

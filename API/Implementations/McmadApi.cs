@@ -169,45 +169,41 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Starts the server.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        public bool StartServer()
+        public void StartServer()
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStartServer");
-            throw new NotImplementedException();
+            servercaller.Query("StartServer");
         }
 
         /// <summary>
         /// Stops the server.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        public bool StopServer()
+        public void StopServer()
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStopServer");
-            throw new NotImplementedException();
+            servercaller.Query("StopServer");
         }
 
         /// <summary>
         /// Restarts the server.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        public bool RestartServer()
+        public void RestartServer()
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanRestartServer");
-            throw new NotImplementedException();
+            servercaller.Query("RestartServer");
         }
 
         /// <summary>
         /// Kill the server, immediately terminating the process and potentially losing data.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        public bool KillServer()
+        public void KillServer()
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStopServer");
-            throw new NotImplementedException();
+            servercaller.Query("KillServer");
         }
 
         /// <summary>
@@ -218,12 +214,11 @@ namespace McMyAdminAPI.Implementations
         /// However, if someone tries to connect, McMyAdmin will restart the server, 
         /// and ask the player to try to reconnect in a few seconds.
         /// </remarks>
-        /// <returns><c>true</c> if successful.</returns>
-        public bool SleepServer()
+        public void SleepServer()
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStopServer");
-            throw new NotImplementedException();
+            servercaller.Query("SleepServer");
         }
 
         /// <summary>
@@ -306,7 +301,7 @@ namespace McMyAdminAPI.Implementations
         private void CheckUserPermissionsForMethod(string permissions)
         {
             // If we are not logged in, throw the exception.
-            if ((bool)typeof(UserMask).GetProperty(permissions).GetValue(this.AuthorisationMask, null))
+            if ((bool)typeof(UserMask).GetProperty(permissions).GetValue(this.UserPermissionMask, null))
             {
                 throw new NoPermissionException("No permssions for this method - failed check " + permissions + ". Please contact your server admin if you believe this is in error.", null);
             }

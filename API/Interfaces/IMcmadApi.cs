@@ -66,26 +66,22 @@ namespace McMyAdminAPI.Interfaces
         /// <summary>
         /// Starts the server.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        bool StartServer();
+        void StartServer();
 
         /// <summary>
         /// Stops the server.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        bool StopServer();
+        void StopServer();
 
         /// <summary>
         /// Restarts the server.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        bool RestartServer();
+        void RestartServer();
 
         /// <summary>
         /// Kill the server, immediately terminating the process and potentially losing data.
         /// </summary>
-        /// <returns><c>true</c> if successful.</returns>
-        bool KillServer();
+        void KillServer();
 
         /// <summary>
         /// Puts the server to sleep.
@@ -95,8 +91,7 @@ namespace McMyAdminAPI.Interfaces
         /// However, if someone tries to connect, McMyAdmin will restart the server, 
         /// and ask the player to try to reconnect in a few seconds.
         /// </remarks>
-        /// <returns><c>true</c> if successful.</returns>
-        bool SleepServer();
+        void SleepServer();
 
         #endregion
 
