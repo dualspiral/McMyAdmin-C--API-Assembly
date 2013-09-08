@@ -36,7 +36,7 @@ namespace McMyAdminAPI.Implementations
         /// Initialises a new instance of the <see cref="McmadApi"/> class.
         /// </summary>
         /// <param name="servercaller">The <see cref="IServerCaller"/> to use.</param>
-        public McmadApi(IServerCaller servercaller)
+        internal McmadApi(IServerCaller servercaller)
         {
             this.servercaller = servercaller;
         }
@@ -306,7 +306,7 @@ namespace McMyAdminAPI.Implementations
             // If we are not logged in, throw the exception.
             if ((bool)typeof(UserMask).GetProperty(permissions).GetValue(this.UserPermissionMask, null))
             {
-                throw new NoPermissionException("No permssions for this method - failed check " + permissions + ". Please contact your server admin if you believe this is in error.", null);
+                throw new NoPermissionException(string.Format("No permssions for this method - failed check {0}. Please contact your server admin if you believe this is in error.", permissions), null);
             }
         }
 
