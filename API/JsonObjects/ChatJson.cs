@@ -2,14 +2,19 @@
 // Copyright (c) 2013. Licensed under the MIT License.
 // <author>Dr Daniel Naylor</author>
 // </copyright>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using McMyAdminAPI.BusinessEntities;
 using Newtonsoft.Json;
 
 namespace McMyAdminAPI.JsonObjects
 {
     /// <summary>
-    /// Class that represents the Login json object.
+    /// Class that represents the ChatJson object
     /// </summary>
-    internal class LoginJson
+    internal class ChatJson
     {
         /// <summary>
         /// Gets or sets the value associated with the "success" parameter
@@ -27,21 +32,9 @@ namespace McMyAdminAPI.JsonObjects
         internal int Status { get; set; }
 
         /// <summary>
-        /// Gets or sets the McMyAdmin Session Token.
+        /// Gets or sets the value associated with the "success" parameter
         /// </summary>
-        [JsonProperty(PropertyName = "MCMASESSIONID")]
-        internal string SessionToken { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Authorisation Mask.
-        /// </summary>
-        [JsonProperty(PropertyName = "authmask")]
-        internal int AuthMask { get; set; }
-
-        /// <summary>
-        /// Gets or sets the User Mask.
-        /// </summary>
-        [JsonProperty(PropertyName = "usermask")]
-        internal int UserMask { get; set; }
+        [JsonProperty(PropertyName = "chatdata")]
+        internal IList<ChatMessage> ChatMessages { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using McMyAdminAPI.DataTransferObjects;
+using McMyAdminAPI.BusinessEntities;
 using McMyAdminAPI.Exceptions;
 using McMyAdminAPI.Interfaces;
 using McMyAdminAPI.JsonObjects;
@@ -236,7 +236,21 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanAccessConsole");
-            throw new NotImplementedException();
+
+            var paramaters = new Dictionary<string, string>
+            {
+                { "Since", timestamp.ToString() }
+            };
+
+            var response = JsonConvert.DeserializeObject<ChatJson>(servercaller.Query("GetChat", paramaters));
+
+            if (response.Success)
+            {
+                return response.ChatMessages;
+            }
+
+            // Server error
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null);
         }
 
         /// <summary>
