@@ -39,7 +39,7 @@ namespace McMyAdminAPI.BusinessEntities
         #region Public Properties
 
         /// <summary>
-        /// Gets the user authmask
+        /// Gets the user authorisation mask
         /// </summary>
         public int GetRawAuthMask
         {

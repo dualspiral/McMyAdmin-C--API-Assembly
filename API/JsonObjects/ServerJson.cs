@@ -1,4 +1,4 @@
-﻿// <copyright file="LoginJson.cs">
+﻿// <copyright file="ServerInfo.cs">
 // Copyright (c) 2013. Licensed under the MIT License.
 // <author>Dr Daniel Naylor</author>
 // </copyright>
@@ -7,20 +7,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using McMyAdminAPI.BusinessEntities;
-using Newtonsoft.Json;
 
 namespace McMyAdminAPI.JsonObjects
 {
     /// <summary>
-    /// Class that represents the ChatJson object
+    /// Provides general information about the current server status.
     /// </summary>
-    public class ChatJson
+    /// <remarks>
+    /// Most objects in this class are <see cref="Nullable"/>, as McMyAdmin does not send all information unless the server is in a running state.
+    /// </remarks>
+    internal class ServerJson : ServerInfo
     {
         /// <summary>
-        /// Gets or sets the value associated with the "timestamp" parameter
+        /// Gets or sets the failure status.
         /// </summary>
-        [JsonProperty(PropertyName = "timestamp")]
-        public long Timestamp { get; set; }
+        internal bool Failed { get; set; }
 
         /// <summary>
         /// Gets or sets the value associated with the "status" property.
@@ -28,13 +29,6 @@ namespace McMyAdminAPI.JsonObjects
         /// <remarks>
         /// This value is broadly in line with the HTTP Status code definitions. On success, we expect this to be "200".
         /// </remarks>
-        [JsonProperty(PropertyName = "status")]
-        public int Status { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value associated with the "success" parameter
-        /// </summary>
-        [JsonProperty(PropertyName = "chatdata")]
-        public IList<ChatMessage> ChatMessages { get; set; }
+        internal int Status { get; set; }
     }
 }

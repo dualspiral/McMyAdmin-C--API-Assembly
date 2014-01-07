@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using McMyAdminAPI.DataTransferObjects;
+using McMyAdminAPI.BusinessEntities;
 
 namespace McMyAdminAPI.Interfaces
 {
@@ -106,7 +106,7 @@ namespace McMyAdminAPI.Interfaces
         /// </summary>   
         /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
         /// <returns>
-        /// An <see cref="IList"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
+        /// An <see cref="IList{T}"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
         /// in the McMyAdmin server with a timestamp greater than the one specified.
         /// </returns>
         IList<ChatMessage> GetChat(long timestamp = -1);
@@ -120,7 +120,7 @@ namespace McMyAdminAPI.Interfaces
         /// <summary>
         /// Retrieves a list of plugins in use on the server.
         /// </summary>
-        /// <returns>An <see cref="IList"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
+        /// <returns>An <see cref="IList{T}"/> of <see cref="ServerPlugin"/> objects that contains information about the plugins that are installed.</returns>
         IList<ServerPlugin> GetPlugins();
 
         #endregion

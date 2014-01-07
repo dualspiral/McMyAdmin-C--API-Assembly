@@ -38,7 +38,7 @@ namespace McMyAdminAPI.Interfaces
         /// A key-value set of parameters to call. Should be set to <c>null</c> if 
         /// there are no parameters to add to the method.
         /// </param>
-        /// <returns><see cref="String"/> containing the server response as serialized <see cref="Json"/>.</returns>
+        /// <returns><see cref="String"/> containing the server response as serialized Json.</returns>
         string Query(string apimethod, IDictionary<string, string> parameters = null);
 
         #endregion

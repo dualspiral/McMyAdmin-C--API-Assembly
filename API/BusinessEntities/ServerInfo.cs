@@ -14,51 +14,51 @@ namespace McMyAdminAPI.BusinessEntities
     /// Provides general information about the current server status.
     /// </summary>
     /// <remarks>
-    /// Most objects in this struct are <see cref="Nullable"/>, as McMyAdmin does not send all information unless the server is in a running state.
+    /// Most objects in this class are <see cref="Nullable"/>, as McMyAdmin does not send all information unless the server is in a running state.
     /// </remarks>
-    public struct ServerInfo
+    public class ServerInfo
     {
         /// <summary>
-        /// Gets or sets the run status of the server.
+        /// Gets the run status of the server.
         /// </summary>
-        public ServerStatus RunStatus { get; set; }
+        public ServerStatus RunStatus { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the number of players currently on the server.
+        /// Gets the number of players currently on the server.
         /// </summary>
-        public int? NumberOfPlayers { get; set; }
+        public int? NumberOfPlayers { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the maximum number of players currently on the server.
+        /// Gets the maximum number of players currently on the server.
         /// </summary>
-        public int? MaxNumberOfPlayers { get; set; }
+        public int? MaxNumberOfPlayers { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the current CPU usage.
+        /// Gets the current CPU usage.
         /// </summary>
         /// <remarks>
         /// This value is a percentage, so will always be between 0 and 100.
         /// </remarks>
-        public int? CPU { get; set; }
+        public int? CPU { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the current RAM usage.
+        /// Gets the current RAM usage.
         /// </summary>
-        public int? RAM { get; set; }
+        public int? RAM { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the maximum allocated RAM to your server.
+        /// Gets the maximum allocated RAM to your server.
         /// </summary>
-        public int? MaxRAM { get; set; }
+        public int? MaxRAM { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the server uptime.
+        /// Gets the server uptime.
         /// </summary>
-        public TimeSpan? Uptime { get; set; }
+        public TimeSpan? Uptime { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the list of players currently on the server.
+        /// Gets the list of players currently on the server.
         /// </summary>
-        public IList<Player> Players { get; set; }
+        public IList<Player> Players { get; internal set; }
     }
 }

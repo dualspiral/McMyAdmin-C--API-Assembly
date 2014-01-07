@@ -63,6 +63,7 @@
     <Compile Include="Interfaces\IServerCaller.cs" />
     <Compile Include="JsonObjects\ChatJson.cs" />
     <Compile Include="JsonObjects\LoginJson.cs" />
+    <Compile Include="JsonObjects\ServerJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

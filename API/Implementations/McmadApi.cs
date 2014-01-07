@@ -160,6 +160,7 @@ namespace McMyAdminAPI.Implementations
             {
                 return true;
             }
+
             // HTTP 403 -> Forbidden
             else if ((int)(json.status) == 403)
             {
@@ -228,11 +229,11 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Retrieves the latest chat messages from the server.
         /// </summary>   
-        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
+        /// <param name="timestamp">The earliest timestamp to get. Updated to the current timestamp of the server.</param>
         /// <returns>
         /// An <see cref="IList{ChatMessage}"/> of <see cref="ChatMessage"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
         /// </returns>
-        public IList<ChatMessage> GetChat(long timestamp = -1)
+        public IList<ChatMessage> GetChat(ref long timestamp)
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanAccessConsole");
@@ -244,13 +245,26 @@ namespace McMyAdminAPI.Implementations
 
             var response = JsonConvert.DeserializeObject<ChatJson>(servercaller.Query("GetChat", paramaters));
 
-            if (response.Success)
+            if (response.Status == 200)
             {
+                timestamp = response.Timestamp;
                 return response.ChatMessages;
             }
 
             // Server error
             throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null);
+        }
+
+        /// <summary>
+        /// Retrieves the latest chat messages from the server.
+        /// </summary>   
+        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
+        /// <returns>
+        /// An <see cref="IList{ChatMessage}"/> of <see cref="ChatMessage"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
+        /// </returns>
+        public IList<ChatMessage> GetChat(long timestamp = -1)
+        {
+            return GetChat(ref timestamp);
         }
 
         /// <summary>
@@ -260,7 +274,14 @@ namespace McMyAdminAPI.Implementations
         public ServerInfo GetStatus()
         {
             CheckLoggedIn();
-            throw new NotImplementedException();
+            var response = JsonConvert.DeserializeObject<ServerJson>(servercaller.Query("GetStatus"));
+            if (!response.Failed)
+            {
+                return response;
+            }
+
+            // Server error
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null);
         }
 
         /// <summary>
@@ -313,7 +334,7 @@ namespace McMyAdminAPI.Implementations
         }
 
         /// <summary>
-        /// Utility method to check if a user has permissions for the requested method using the <see cref="UserPermissionsMask"/>. If not, throws a <see cref="NoPermissionException"/>
+        /// Utility method to check if a user has permissions for the requested method using the <see cref="UserMask"/>. If not, throws a <see cref="NoPermissionException"/>
         /// </summary>
         private void CheckUserPermissionsForMethod(string permissions)
         {
