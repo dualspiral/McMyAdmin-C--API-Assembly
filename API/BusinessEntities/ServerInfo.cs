@@ -30,12 +30,13 @@ namespace McMyAdminAPI.BusinessEntities
         /// <summary>
         /// Gets the number of players currently on the server.
         /// </summary>
+        [JsonProperty(PropertyName = "users")]
         public int? NumberOfPlayers { get; internal set; }
 
         /// <summary>
         /// Gets the maximum number of players currently on the server.
         /// </summary>
-        [JsonProperty(PropertyName = "users")]
+        [JsonProperty(PropertyName = "maxusers")]
         public int? MaxNumberOfPlayers { get; internal set; }
 
         /// <summary>

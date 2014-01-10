@@ -1,9 +1,10 @@
 bin
 obj
+packages
 /*.suo
 *.Cache
 /Documentation/APIDocmentation/Help
-
 /Documentation/APIDocmentation/APIDocmentation.shfbproj_Daniel
 /Documentation/APIDocmentation/APIDocmentation.v11.suo
 /Doxygen
+/doxygen_help
