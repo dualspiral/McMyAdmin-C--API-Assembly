@@ -52,7 +52,7 @@ namespace McMyAdminAPI.Implementations
         {
             get
             {
-                return string.IsNullOrEmpty(servercaller.SessionToken);
+                return !string.IsNullOrEmpty(servercaller.SessionToken);
             }
         }
 
@@ -84,6 +84,11 @@ namespace McMyAdminAPI.Implementations
             get;
             private set;
         }
+
+        /// <summary>
+        /// Gets the Username that was used to log into this instance.
+        /// </summary>
+        public string Username { get; private set; }
 
         /// <summary>
         /// Login to the server. Must be called before any other method.
@@ -121,6 +126,7 @@ namespace McMyAdminAPI.Implementations
             servercaller.SessionToken = jsonResult.SessionToken;
             AuthorisationMask = new AuthMask(jsonResult.AuthMask);
             UserPermissionMask = new UserMask(jsonResult.UserMask);
+            Username = username;
 
             // We have logged in.
             return true;
@@ -274,7 +280,8 @@ namespace McMyAdminAPI.Implementations
         public ServerInfo GetStatus()
         {
             CheckLoggedIn();
-            var response = JsonConvert.DeserializeObject<ServerJson>(servercaller.Query("GetStatus"));
+            var json = servercaller.Query("GetStatus");
+            var response = JsonConvert.DeserializeObject<ServerJson>(json);
             if (!response.Failed)
             {
                 return response;

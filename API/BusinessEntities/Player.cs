@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using Newtonsoft.Json;
 
 namespace McMyAdminAPI.BusinessEntities
 {
@@ -15,16 +16,19 @@ namespace McMyAdminAPI.BusinessEntities
         /// <summary>
         /// Gets or sets the player name.
         /// </summary>
+        [JsonProperty(PropertyName="name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the player's IP address.
         /// </summary>
+        [JsonProperty(PropertyName = "IP")]
         public string IP { get; set; }
 
         /// <summary>
         /// Gets or sets the Connection time.
         /// </summary>
+        [JsonProperty(PropertyName = "ConnectTime")]
         public DateTime Connected { get; set; }
     }
 }

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using McMyAdminAPI.Enums;
+using McMyAdminAPI.JsonConverters;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace McMyAdminAPI.BusinessEntities
 {
@@ -21,6 +24,7 @@ namespace McMyAdminAPI.BusinessEntities
         /// <summary>
         /// Gets the run status of the server.
         /// </summary>
+        [JsonProperty(PropertyName = "state")]
         public ServerStatus RunStatus { get; internal set; }
 
         /// <summary>
@@ -31,6 +35,7 @@ namespace McMyAdminAPI.BusinessEntities
         /// <summary>
         /// Gets the maximum number of players currently on the server.
         /// </summary>
+        [JsonProperty(PropertyName = "users")]
         public int? MaxNumberOfPlayers { get; internal set; }
 
         /// <summary>
@@ -39,26 +44,33 @@ namespace McMyAdminAPI.BusinessEntities
         /// <remarks>
         /// This value is a percentage, so will always be between 0 and 100.
         /// </remarks>
+        [JsonProperty(PropertyName = "cpuusage")]
         public int? CPU { get; internal set; }
 
         /// <summary>
         /// Gets the current RAM usage.
         /// </summary>
+        [JsonProperty(PropertyName = "ram")]
         public int? RAM { get; internal set; }
 
         /// <summary>
         /// Gets the maximum allocated RAM to your server.
         /// </summary>
+        [JsonProperty(PropertyName = "maxram")]
         public int? MaxRAM { get; internal set; }
 
         /// <summary>
         /// Gets the server uptime.
         /// </summary>
+        [JsonProperty(PropertyName = "uptime")]
+        [JsonConverter(typeof(JsonUptimeConverter))]
         public TimeSpan? Uptime { get; internal set; }
 
         /// <summary>
         /// Gets the list of players currently on the server.
         /// </summary>
-        public IList<Player> Players { get; internal set; }
+        [JsonProperty(PropertyName = "userinfo")]
+        [JsonConverter(typeof(JsonPlayerConverter))]
+        public List<Player> Players { get; internal set; }
     }
 }

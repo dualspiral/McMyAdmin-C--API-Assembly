@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace McMyAdminAPI.Implementations
 {
@@ -107,7 +108,7 @@ namespace McMyAdminAPI.Implementations
             Uri requestUri = new Uri(string.Format("{0}{1}", serverurl, query.ToString()));
 
             // Fix any spaces.
-            this.ForceCanonicalPathAndQuery(requestUri);
+            // this.ForceCanonicalPathAndQuery(requestUri);
 
             // Create the request
             HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;

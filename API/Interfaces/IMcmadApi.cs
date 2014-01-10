@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using McMyAdminAPI.BusinessEntities;
 
 namespace McMyAdminAPI.Interfaces
@@ -36,6 +37,11 @@ namespace McMyAdminAPI.Interfaces
         /// Gets a value indicating the User Mask for the currently logged in user.
         /// </summary>
         UserMask UserPermissionMask { get; }
+
+        /// <summary>
+        /// Gets the Username that was used to log into this instance.
+        /// </summary>
+        string Username { get; }
 
         #endregion
 
