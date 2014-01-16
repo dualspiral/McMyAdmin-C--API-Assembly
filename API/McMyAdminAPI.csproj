@@ -62,6 +62,8 @@
     <Compile Include="Exceptions\NotLoggedInException.cs" />
     <Compile Include="JsonConverters\JsonUptimeConverter.cs" />
     <Compile Include="JsonConverters\JsonPlayerConverter.cs" />
+    <Compile Include="JsonObjects\IStatusJson.cs" />
+    <Compile Include="JsonObjects\StatusJson.cs" />
     <Compile Include="McMyAdminApi.cs" />
     <Compile Include="Implementations\McmadApi.cs" />
     <Compile Include="Implementations\ServerCaller.cs" />

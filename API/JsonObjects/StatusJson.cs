@@ -1,27 +1,16 @@
-﻿// <copyright file="ServerInfo.cs">
-// Copyright (c) 2013. Licensed under the MIT License.
-// <author>Dr Daniel Naylor</author>
-// </copyright>
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using McMyAdminAPI.BusinessEntities;
 using Newtonsoft.Json;
 
 namespace McMyAdminAPI.JsonObjects
 {
     /// <summary>
-    /// Provides general information about the current server status.
+    /// A class that represents an action that only returns whether it succeeded.
     /// </summary>
-    internal class ServerJson : ServerInfo, IStatusJson
-    {
-        /// <summary>
-        /// Gets or sets the failure status.
-        /// </summary>
-        [JsonProperty(PropertyName = "failed")]
-        public bool Failed { get; set; }
-
+    internal class StatusJson : IStatusJson
+    {        
         /// <summary>
         /// Gets or sets the value associated with the "status" property.
         /// </summary>

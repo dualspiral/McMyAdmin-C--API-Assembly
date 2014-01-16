@@ -101,10 +101,8 @@ namespace McMyAdminAPI.Implementations
         /// </remarks>
         public bool Login(string username, string password)
         {
-            string response;
-
             // Make the login request. This 
-            response = servercaller.Query("login", new Dictionary<string, string> { { "username", username }, { "password", password }, { "token", string.Empty } });
+            string response = servercaller.Query("login", new Dictionary<string, string> { { "username", username }, { "password", password }, { "token", string.Empty } });
 
             // Use our LoginJson helper object to deserialize the JSON
             LoginJson jsonResult = JsonConvert.DeserializeObject<LoginJson>(response);
@@ -158,7 +156,7 @@ namespace McMyAdminAPI.Implementations
             CheckUserPermissionsForMethod("CanChangePassword");
 
             // As we only get a status back, a dynamic object will suffice.
-            string response = servercaller.Query("ChangePassword", new Dictionary<string, string> { {"OldPassword", oldpassword }, { "NewPassword", newpassword } });
+            string response = servercaller.Query("ChangePassword", new Dictionary<string, string> { { "OldPassword", oldpassword }, { "NewPassword", newpassword } });
             dynamic json = JsonConvert.DeserializeObject(response);
 
             // HTTP 200 -> OK
@@ -172,7 +170,7 @@ namespace McMyAdminAPI.Implementations
             {
                 return false;
             }
-            
+
             // Server error
             throw new FailedApiCallException(string.Format("Server returned an error code of {0}", (json.status).ToString()), null, json.Status);
         }
@@ -184,7 +182,13 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStartServer");
-            servercaller.Query("StartServer");
+            var response = servercaller.Query("StartServer");
+
+            // Use our StatusJson helper object to deserialize the JSON
+            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+
+            // Throws if the status code is not correct.
+            CheckStatusCode(jsonResult);
         }
 
         /// <summary>
@@ -194,7 +198,13 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStopServer");
-            servercaller.Query("StopServer");
+            var response = servercaller.Query("StopServer");
+
+            // Use our StatusJson helper object to deserialize the JSON
+            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+
+            // Throws if the status code is not correct.
+            CheckStatusCode(jsonResult);
         }
 
         /// <summary>
@@ -204,7 +214,13 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanRestartServer");
-            servercaller.Query("RestartServer");
+            var response = servercaller.Query("RestartServer");
+
+            // Use our StatusJson helper object to deserialize the JSON
+            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+
+            // Throws if the status code is not correct.
+            CheckStatusCode(jsonResult);
         }
 
         /// <summary>
@@ -214,7 +230,13 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStopServer");
-            servercaller.Query("KillServer");
+            var response = servercaller.Query("KillServer");
+
+            // Use our StatusJson helper object to deserialize the JSON
+            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+
+            // Throws if the status code is not correct.
+            CheckStatusCode(jsonResult);
         }
 
         /// <summary>
@@ -229,7 +251,13 @@ namespace McMyAdminAPI.Implementations
         {
             CheckLoggedIn();
             CheckUserPermissionsForMethod("CanStopServer");
-            servercaller.Query("SleepServer");
+            var response = servercaller.Query("SleepServer");
+
+            // Use our StatusJson helper object to deserialize the JSON
+            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+
+            // Throws if the status code is not correct.
+            CheckStatusCode(jsonResult);
         }
 
         /// <summary>
@@ -251,14 +279,11 @@ namespace McMyAdminAPI.Implementations
 
             var response = JsonConvert.DeserializeObject<ChatJson>(servercaller.Query("GetChat", paramaters));
 
-            if (response.Status == 200)
-            {
-                timestamp = response.Timestamp;
-                return response.ChatMessages;
-            }
+            // Throws if the status code is not correct.
+            CheckStatusCode(response);
 
-            // Server error
-            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null, response.Status);
+            timestamp = response.Timestamp;
+            return response.ChatMessages;
         }
 
         /// <summary>
@@ -310,6 +335,23 @@ namespace McMyAdminAPI.Implementations
         public string MakeRawCall(string apimethod, IDictionary<string, string> parameters)
         {
             return servercaller.Query(apimethod, parameters);
+        }
+
+        #endregion
+
+        #region Private Static Methods
+
+        /// <summary>
+        /// Checks the server code, and throws an exception if the code is not 200.
+        /// </summary>
+        /// <param name="response">The <see cref="StatusJson"/> to parse.</param>
+        private static void CheckStatusCode(IStatusJson response)
+        {
+            if (response.Status != 200)
+            {
+                // Server error
+                throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null, response.Status);
+            }
         }
 
         #endregion

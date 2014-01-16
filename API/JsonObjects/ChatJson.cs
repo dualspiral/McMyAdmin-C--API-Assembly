@@ -14,7 +14,7 @@ namespace McMyAdminAPI.JsonObjects
     /// <summary>
     /// Class that represents the ChatJson object
     /// </summary>
-    public class ChatJson
+    internal class ChatJson : IStatusJson
     {
         /// <summary>
         /// Gets or sets the value associated with the "timestamp" parameter
