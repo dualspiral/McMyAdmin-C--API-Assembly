@@ -119,7 +119,7 @@ namespace McMyAdminAPI.Implementations
                 }
 
                 // Otherwise, we throw a FailedApiException - as it is a server error.
-                throw new FailedApiCallException(string.Format("Server returned an error code of {0}", jsonResult.Status.ToString()), null);
+                throw new FailedApiCallException(string.Format("Server returned an error code of {0}", jsonResult.Status.ToString()), null, jsonResult.Status);
             }
 
             // We know we have logged in - set all the fields!
@@ -174,7 +174,7 @@ namespace McMyAdminAPI.Implementations
             }
             
             // Server error
-            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", (json.status).ToString()), null);
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", (json.status).ToString()), null, json.Status);
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace McMyAdminAPI.Implementations
             }
 
             // Server error
-            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null);
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null, response.Status);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace McMyAdminAPI.Implementations
             }
 
             // Server error
-            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null);
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", response.Status), null, response.Status);
         }
 
         /// <summary>
