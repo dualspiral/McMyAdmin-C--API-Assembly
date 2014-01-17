@@ -118,6 +118,16 @@ namespace McMyAdminAPI.Interfaces
         IList<ChatMessage> GetChat(long timestamp = -1);
 
         /// <summary>
+        /// Retrieves the latest chat messages from the server.
+        /// </summary>   
+        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
+        /// <returns>
+        /// An <see cref="IList{T}"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
+        /// in the McMyAdmin server with a timestamp greater than the one specified.
+        /// </returns>
+        IList<ChatMessage> GetChat(ref long timestamp);
+
+        /// <summary>
         /// Retrieves the latest server information.
         /// </summary>
         /// <returns><see cref="ServerInfo"/> object containing the server information.</returns>

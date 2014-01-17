@@ -181,7 +181,7 @@ namespace McMyAdminAPI.Implementations
         public void StartServer()
         {
             CheckLoggedIn();
-            CheckUserPermissionsForMethod("CanStartServer");
+            CheckAuthMaskPermissionsForMethod("CanStartServer");
             var response = servercaller.Query("StartServer");
 
             // Use our StatusJson helper object to deserialize the JSON
@@ -197,7 +197,7 @@ namespace McMyAdminAPI.Implementations
         public void StopServer()
         {
             CheckLoggedIn();
-            CheckUserPermissionsForMethod("CanStopServer");
+            CheckAuthMaskPermissionsForMethod("CanStopServer");
             var response = servercaller.Query("StopServer");
 
             // Use our StatusJson helper object to deserialize the JSON
@@ -213,7 +213,7 @@ namespace McMyAdminAPI.Implementations
         public void RestartServer()
         {
             CheckLoggedIn();
-            CheckUserPermissionsForMethod("CanRestartServer");
+            CheckAuthMaskPermissionsForMethod("CanRestartServer");
             var response = servercaller.Query("RestartServer");
 
             // Use our StatusJson helper object to deserialize the JSON
@@ -229,7 +229,7 @@ namespace McMyAdminAPI.Implementations
         public void KillServer()
         {
             CheckLoggedIn();
-            CheckUserPermissionsForMethod("CanStopServer");
+            CheckAuthMaskPermissionsForMethod("CanStopServer");
             var response = servercaller.Query("KillServer");
 
             // Use our StatusJson helper object to deserialize the JSON
@@ -250,7 +250,7 @@ namespace McMyAdminAPI.Implementations
         public void SleepServer()
         {
             CheckLoggedIn();
-            CheckUserPermissionsForMethod("CanStopServer");
+            CheckAuthMaskPermissionsForMethod("CanStopServer");
             var response = servercaller.Query("SleepServer");
 
             // Use our StatusJson helper object to deserialize the JSON
@@ -270,7 +270,7 @@ namespace McMyAdminAPI.Implementations
         public IList<ChatMessage> GetChat(ref long timestamp)
         {
             CheckLoggedIn();
-            CheckUserPermissionsForMethod("CanAccessConsole");
+            CheckAuthMaskPermissionsForMethod("CanAccessConsole");
 
             var paramaters = new Dictionary<string, string>
             {
@@ -376,7 +376,7 @@ namespace McMyAdminAPI.Implementations
         private void CheckAuthMaskPermissionsForMethod(string permissions)
         {
             // If we are not logged in, throw the exception.
-            if ((bool)typeof(AuthMask).GetProperty(permissions).GetValue(this.AuthorisationMask, null))
+            if (!(bool)typeof(AuthMask).GetProperty(permissions).GetValue(this.AuthorisationMask, null))
             {
                 throw new NoPermissionException("No permssions for this method. Please contact your server admin if you believe this is in error.", null);
             }

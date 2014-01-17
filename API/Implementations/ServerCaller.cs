@@ -139,7 +139,7 @@ namespace McMyAdminAPI.Implementations
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null);
+                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null, (int)response.StatusCode);
                     }
 
                     // Set the cookies to be sent next time.
@@ -154,10 +154,20 @@ namespace McMyAdminAPI.Implementations
             }
             catch (WebException e)
             {
+                if (e.Status == WebExceptionStatus.ProtocolError)
+                {
+                    var response = e.Response as HttpWebResponse;
+                    if (response != null)
+                    {
+                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null, (int)response.StatusCode);
+                    }
+                }
+
                 // If we failed, throw the failed exception with the inner exception set to what cause this to fail.
                 throw new FailedApiCallException("The API failed to make the call.", e);
             }
         }
+
 
         #endregion
 
