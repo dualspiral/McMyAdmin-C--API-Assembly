@@ -327,6 +327,17 @@ namespace McMyAdminAPI.Implementations
         }
 
         /// <summary>
+        /// Sends a chat message to the server.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        public void SendChat(string message)
+        {
+            CheckLoggedIn();
+            CheckAuthMaskPermissionsForMethod("CanAccessConsole");
+            servercaller.Query("sendchat", new Dictionary<string, string> { { "Message", message } });
+        }
+
+        /// <summary>
         /// Perform a call on the API and retrieve the JSON serialised as a string.
         /// </summary>
         /// <param name="apimethod">API method to call.</param>

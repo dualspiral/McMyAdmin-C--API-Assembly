@@ -141,6 +141,16 @@ namespace McMyAdminAPI.Interfaces
 
         #endregion
 
+        #region Set Information
+
+        /// <summary>
+        /// Sends a chat message to the server.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        void SendChat(string message);
+
+        #endregion
+
         #region Raw Call
 
         /// <summary>
