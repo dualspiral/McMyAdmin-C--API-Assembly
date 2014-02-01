@@ -102,10 +102,10 @@ namespace McMyAdminAPI.Implementations
         public bool Login(string username, string password)
         {
             // Make the login request. This 
-            string response = servercaller.Query("login", new Dictionary<string, string> { { "username", username }, { "password", password }, { "token", string.Empty } });
+            var response = servercaller.Query("login", new Dictionary<string, string> { { "username", username }, { "password", password }, { "token", string.Empty } });
 
             // Use our LoginJson helper object to deserialize the JSON
-            LoginJson jsonResult = JsonConvert.DeserializeObject<LoginJson>(response);
+            var jsonResult = JsonConvert.DeserializeObject<LoginJson>(response);
 
             // Get the success paramter out.
             if (!jsonResult.Success)
@@ -137,7 +137,7 @@ namespace McMyAdminAPI.Implementations
         public bool Logout()
         {
             CheckLoggedIn();
-            servercaller.Query("logout", null);
+            servercaller.Query("logout");
             servercaller.SessionToken = null;
 
             // We have lost the session anyway, so return true.
@@ -166,7 +166,7 @@ namespace McMyAdminAPI.Implementations
             }
 
             // HTTP 403 -> Forbidden
-            else if ((int)(json.status) == 403)
+            if ((int)(json.status) == 403)
             {
                 return false;
             }
@@ -201,7 +201,7 @@ namespace McMyAdminAPI.Implementations
             var response = servercaller.Query("StopServer");
 
             // Use our StatusJson helper object to deserialize the JSON
-            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+            var jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
 
             // Throws if the status code is not correct.
             CheckStatusCode(jsonResult);
@@ -217,7 +217,7 @@ namespace McMyAdminAPI.Implementations
             var response = servercaller.Query("RestartServer");
 
             // Use our StatusJson helper object to deserialize the JSON
-            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+            var jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
 
             // Throws if the status code is not correct.
             CheckStatusCode(jsonResult);
@@ -233,7 +233,7 @@ namespace McMyAdminAPI.Implementations
             var response = servercaller.Query("KillServer");
 
             // Use our StatusJson helper object to deserialize the JSON
-            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+            var jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
 
             // Throws if the status code is not correct.
             CheckStatusCode(jsonResult);
@@ -254,7 +254,7 @@ namespace McMyAdminAPI.Implementations
             var response = servercaller.Query("SleepServer");
 
             // Use our StatusJson helper object to deserialize the JSON
-            StatusJson jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
+            var jsonResult = JsonConvert.DeserializeObject<StatusJson>(response);
 
             // Throws if the status code is not correct.
             CheckStatusCode(jsonResult);
@@ -375,7 +375,7 @@ namespace McMyAdminAPI.Implementations
         private void CheckLoggedIn()
         {
             // If we are not logged in, throw the exception.
-            if (!this.IsLoggedIn)
+            if (!IsLoggedIn)
             {
                 throw new NotLoggedInException("No session ID. You must login before you can use this method.", null);
             }
@@ -387,7 +387,7 @@ namespace McMyAdminAPI.Implementations
         private void CheckAuthMaskPermissionsForMethod(string permissions)
         {
             // If we are not logged in, throw the exception.
-            if (!(bool)typeof(AuthMask).GetProperty(permissions).GetValue(this.AuthorisationMask, null))
+            if (!(bool)typeof(AuthMask).GetProperty(permissions).GetValue(AuthorisationMask, null))
             {
                 throw new NoPermissionException("No permssions for this method. Please contact your server admin if you believe this is in error.", null);
             }
@@ -399,7 +399,7 @@ namespace McMyAdminAPI.Implementations
         private void CheckUserPermissionsForMethod(string permissions)
         {
             // If we are not logged in, throw the exception.
-            if ((bool)typeof(UserMask).GetProperty(permissions).GetValue(this.UserPermissionMask, null))
+            if ((bool)typeof(UserMask).GetProperty(permissions).GetValue(UserPermissionMask, null))
             {
                 throw new NoPermissionException(string.Format("No permssions for this method - failed check {0}. Please contact your server admin if you believe this is in error.", permissions), null);
             }

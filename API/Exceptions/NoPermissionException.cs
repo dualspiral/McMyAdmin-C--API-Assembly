@@ -3,15 +3,13 @@
 // <author>Dr Daniel Naylor</author>
 // </copyright>
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace McMyAdminAPI.Exceptions
 {
     /// <summary>
     /// Exception class thrown when the user doesn't have permission to perform an action.
     /// </summary>
+    [Serializable]
     public class NoPermissionException : Exception
     {
         /// <summary>

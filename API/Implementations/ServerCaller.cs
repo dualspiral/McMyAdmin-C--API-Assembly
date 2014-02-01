@@ -11,7 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace McMyAdminAPI.Implementations
 {
@@ -95,8 +94,8 @@ namespace McMyAdminAPI.Implementations
                 // Add any parameters we have. Don't include the MCMASESSIONID.
                 foreach (string key in parameters.Keys.Where(x => x.ToUpperInvariant() != "MCMASESSIONID"))
                 {
-                    string a = this.EscapeString(key);
-                    string b = this.EscapeString(parameters[key]);
+                    string a = EscapeString(key);
+                    string b = EscapeString(parameters[key]);
 
                     query.AppendFormat("&{0}={1}", a, b);
                 }
@@ -105,19 +104,24 @@ namespace McMyAdminAPI.Implementations
             query.AppendFormat("&MCMASESSIONID={0}", SessionToken);
 
             // Create the URL to request from.
-            Uri requestUri = new Uri(string.Format("{0}{1}", serverurl, query.ToString()));
+            var requestUri = new Uri(string.Format("{0}{1}", serverurl, query));
 
             // Fix any spaces.
             // this.ForceCanonicalPathAndQuery(requestUri);
 
             // Create the request
-            HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
+            var request = WebRequest.Create(requestUri) as HttpWebRequest;
+
+            if (request == null)
+            {
+                throw new FailedApiCallException("The API failed to make the call.", null);
+            }
 
             // Add the cookies to the request.
             request.CookieContainer = new CookieContainer();
-            if (this.cookies.Count != 0)
+            if (cookies.Count != 0)
             {
-                foreach (Cookie a in this.cookies)
+                foreach (Cookie a in cookies)
                 {
                     request.CookieContainer.Add(a);
                 }
@@ -135,18 +139,25 @@ namespace McMyAdminAPI.Implementations
             try
             {
                 // Make the request
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                using (var response = request.GetResponse() as HttpWebResponse)
                 {
+                    if (response == null)
+                    {
+                        throw new FailedApiCallException("The API failed to make the call.", null);
+                    }
+
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null, (int)response.StatusCode);
+                        throw new FailedApiCallException(
+                            string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode,
+                                response.StatusDescription), null, (int) response.StatusCode);
                     }
 
                     // Set the cookies to be sent next time.
                     cookies = response.Cookies;
 
                     // Get the text response.
-                    StreamReader httpReponse = new StreamReader(response.GetResponseStream(), true);
+                    var httpReponse = new StreamReader(response.GetResponseStream(), true);
 
                     // Return it.
                     return httpReponse.ReadToEnd();
@@ -159,7 +170,9 @@ namespace McMyAdminAPI.Implementations
                     var response = e.Response as HttpWebResponse;
                     if (response != null)
                     {
-                        throw new FailedApiCallException(string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode, response.StatusDescription), null, (int)response.StatusCode);
+                        throw new FailedApiCallException(
+                            string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode,
+                                response.StatusDescription), null, (int) response.StatusCode);
                     }
                 }
 
@@ -172,19 +185,6 @@ namespace McMyAdminAPI.Implementations
         #endregion
 
         #region Private Methods
-
-        /// <summary>
-        /// Method to force use of %2F in URLs (Thanks to http://stackoverflow.com/questions/781205/getting-a-url-with-an-url-encoded-slash)
-        /// </summary>
-        /// <param name="uri"><see cref="Uri"/> that contains the request to be made.</param>
-        private void ForceCanonicalPathAndQuery(Uri uri)
-        {
-            // string paq = uri.PathAndQuery; // need to access PathAndQuery
-            FieldInfo flagsFieldInfo = typeof(Uri).GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
-            ulong flags = (ulong)flagsFieldInfo.GetValue(uri);
-            flags &= ~((ulong)0x30); // Flags.PathNotCanonical|Flags.QueryNotCanonical
-            flagsFieldInfo.SetValue(uri, flags);
-        }
 
         /// <summary>
         /// Escapes a string using Uri encoding

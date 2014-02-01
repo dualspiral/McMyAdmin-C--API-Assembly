@@ -3,15 +3,13 @@
 // <author>Dr Daniel Naylor</author>
 // </copyright>
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace McMyAdminAPI.Exceptions
 {
     /// <summary>
     /// Exception thrown when an API call failed.
     /// </summary>
+    [Serializable]
     public class FailedApiCallException : Exception
     {
         /// <summary>

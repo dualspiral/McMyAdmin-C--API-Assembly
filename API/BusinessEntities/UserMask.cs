@@ -2,10 +2,6 @@
 // Copyright (c) 2013. Licensed under the MIT License.
 // <author>Dr Daniel Naylor</author>
 // </copyright>
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace McMyAdminAPI.BusinessEntities
 {
@@ -19,7 +15,7 @@ namespace McMyAdminAPI.BusinessEntities
         /// <summary>
         /// The <see cref="UserMask"/> numeric representation.
         /// </summary>
-        private int usermask;
+        private readonly int usermask;
 
         #endregion
 

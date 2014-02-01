@@ -3,9 +3,6 @@
 // <author>Dr Daniel Naylor</author>
 // </copyright>
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace McMyAdminAPI.BusinessEntities
 {
@@ -59,16 +56,11 @@ namespace McMyAdminAPI.BusinessEntities
         public int CompareTo(object obj)
         {
             // The other object should be a ChatMessage.
-            ChatMessage otherMessage = obj as ChatMessage;
+            var otherMessage = obj as ChatMessage;
 
-            // If the object we are comparing to isn't actually there, return 1.
-            if (otherMessage == null)
-            {
-                return 1;
-            }
-            
-            // Compare the timestamps.
-            return Timestamp.CompareTo(otherMessage.Timestamp);
+            // If the object we are comparing to isn't actually there, return 1. Otherwise, return the timestamp.
+            return (otherMessage == null) ? 1 : Timestamp.CompareTo(otherMessage.Timestamp);
+
         }
 
         #endregion

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="IStatusJson.cs">
+// Copyright (c) 2013. Licensed under the MIT License.
+// <author>Dr Daniel Naylor</author>
+// </copyright>
 using Newtonsoft.Json;
 
 namespace McMyAdminAPI.JsonObjects
