@@ -13,11 +13,6 @@ namespace McMyAdminAPI.Exceptions
     public class FailedApiCallException : Exception
     {
         /// <summary>
-        /// Gets the status code that was returned with the response, if any.
-        /// </summary>
-        public int? Status { get; private set; }
-
-        /// <summary>
         /// Initialises a new instance of the FailedApiCallException class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
@@ -26,7 +21,12 @@ namespace McMyAdminAPI.Exceptions
         public FailedApiCallException(string message, Exception innerException, int? status = null) 
             : base(message, innerException)
         {
-            Status = status;
+            this.Status = status;
         }
+
+        /// <summary>
+        /// Gets the status code that was returned with the response, if any.
+        /// </summary>
+        public int? Status { get; private set; }
     }
 }

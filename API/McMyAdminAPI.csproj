@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntities\AuthMask.cs" />
     <Compile Include="BusinessEntities\ChatMessage.cs" />
+    <Compile Include="BusinessEntities\ChatMessageCollection.cs" />
     <Compile Include="BusinessEntities\Player.cs" />
     <Compile Include="BusinessEntities\ServerInfo.cs" />
     <Compile Include="BusinessEntities\ServerPlugin.cs" />

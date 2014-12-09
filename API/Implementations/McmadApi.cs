@@ -160,19 +160,19 @@ namespace McMyAdminAPI.Implementations
             dynamic json = JsonConvert.DeserializeObject(response);
 
             // HTTP 200 -> OK
-            if ((int)(json.status) == 200)
+            if ((int)json.status == 200)
             {
                 return true;
             }
 
             // HTTP 403 -> Forbidden
-            if ((int)(json.status) == 403)
+            if ((int)json.status == 403)
             {
                 return false;
             }
 
             // Server error
-            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", (json.status).ToString()), null, json.Status);
+            throw new FailedApiCallException(string.Format("Server returned an error code of {0}", json.status.ToString()), null, json.Status);
         }
 
         /// <summary>
@@ -263,11 +263,14 @@ namespace McMyAdminAPI.Implementations
         /// <summary>
         /// Retrieves the latest chat messages from the server.
         /// </summary>   
-        /// <param name="timestamp">The earliest timestamp to get. Updated to the current timestamp of the server.</param>
+        /// <param name="timestamp">
+        /// The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.
+        /// </param>
         /// <returns>
-        /// An <see cref="IList{ChatMessage}"/> of <see cref="ChatMessage"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
+        /// A <see cref="ChatMessageCollection"/> object that contain all the chat messages 
+        /// in the McMyAdmin server with a timestamp greater than the one specified.
         /// </returns>
-        public IList<ChatMessage> GetChat(ref long timestamp)
+        public ChatMessageCollection GetChatMessages(long timestamp = -1)
         {
             CheckLoggedIn();
             CheckAuthMaskPermissionsForMethod("CanAccessConsole");
@@ -281,21 +284,7 @@ namespace McMyAdminAPI.Implementations
 
             // Throws if the status code is not correct.
             CheckStatusCode(response);
-
-            timestamp = response.Timestamp;
-            return response.ChatMessages;
-        }
-
-        /// <summary>
-        /// Retrieves the latest chat messages from the server.
-        /// </summary>   
-        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
-        /// <returns>
-        /// An <see cref="IList{ChatMessage}"/> of <see cref="ChatMessage"/> that contain all the chat messages in the McMyAdmin server with a timestamp greater than the one specified.
-        /// </returns>
-        public IList<ChatMessage> GetChat(long timestamp = -1)
-        {
-            return GetChat(ref timestamp);
+            return new ChatMessageCollection(response.ChatMessages, timestamp);
         }
 
         /// <summary>

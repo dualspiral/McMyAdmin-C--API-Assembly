@@ -2,15 +2,15 @@
 // Copyright (c) 2013. Licensed under the MIT License.
 // <author>Dr Daniel Naylor</author>
 // </copyright>
-using McMyAdminAPI.Exceptions;
-using McMyAdminAPI.Interfaces;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
+using McMyAdminAPI.Exceptions;
+using McMyAdminAPI.Interfaces;
 
 namespace McMyAdminAPI.Implementations
 {
@@ -149,7 +149,8 @@ namespace McMyAdminAPI.Implementations
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
                         throw new FailedApiCallException(
-                            string.Format("Server returned an HTTP error (HTTP {0}: {1}).", response.StatusCode,
+                            string.Format("Server returned an HTTP error (HTTP {0}: {1}).", 
+                                response.StatusCode,
                                 response.StatusDescription), null, (int) response.StatusCode);
                     }
 
@@ -180,7 +181,6 @@ namespace McMyAdminAPI.Implementations
                 throw new FailedApiCallException("The API failed to make the call.", e);
             }
         }
-
 
         #endregion
 

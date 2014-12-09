@@ -16,7 +16,7 @@ namespace McMyAdminAPI.BusinessEntities
         /// <summary>
         /// Gets or sets the player name.
         /// </summary>
-        [JsonProperty(PropertyName="name")]
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>

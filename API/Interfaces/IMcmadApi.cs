@@ -2,6 +2,8 @@
 // Copyright (c) 2013. Licensed under the MIT License.
 // <author>Dr Daniel Naylor</author>
 // </copyright>
+
+using System;
 using System.Collections.Generic;
 using McMyAdminAPI.BusinessEntities;
 
@@ -106,22 +108,14 @@ namespace McMyAdminAPI.Interfaces
         /// <summary>
         /// Retrieves the latest chat messages from the server.
         /// </summary>   
-        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
+        /// <param name="timestamp">
+        /// The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.
+        /// </param>
         /// <returns>
-        /// An <see cref="IList{T}"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
+        /// A <see cref="ChatMessageCollection"/> object that contain all the chat messages 
         /// in the McMyAdmin server with a timestamp greater than the one specified.
         /// </returns>
-        IList<ChatMessage> GetChat(long timestamp = -1);
-
-        /// <summary>
-        /// Retrieves the latest chat messages from the server.
-        /// </summary>   
-        /// <param name="timestamp">The earliest timestamp to get. Defaults to -1, which means get all Chat Messages in the server buffer.</param>
-        /// <returns>
-        /// An <see cref="IList{T}"/> of <see cref="ChatMessage"/> objects that contain all the chat messages 
-        /// in the McMyAdmin server with a timestamp greater than the one specified.
-        /// </returns>
-        IList<ChatMessage> GetChat(ref long timestamp);
+        ChatMessageCollection GetChatMessages(long timestamp = -1);
 
         /// <summary>
         /// Retrieves the latest server information.

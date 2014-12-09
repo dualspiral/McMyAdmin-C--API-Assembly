@@ -50,7 +50,7 @@ namespace McMyAdminAPI.BusinessEntities
         /// <list>
         /// <item>A negative value indicates that this object precedes <paramref name="obj"/></item>
         /// <item>A zero value indicates <paramref name="obj"/> has the same rank</item>
-        /// <item>A postitive value indicates that this object succeeds <paramref name="obj"/></item>
+        /// <item>A positive value indicates that this object succeeds <paramref name="obj"/></item>
         /// </list>
         /// </returns>
         public int CompareTo(object obj)
@@ -58,9 +58,8 @@ namespace McMyAdminAPI.BusinessEntities
             // The other object should be a ChatMessage.
             var otherMessage = obj as ChatMessage;
 
-            // If the object we are comparing to isn't actually there, return 1. Otherwise, return the timestamp.
+            // If the object we are comparing to isn't actually there, return that we succeed it. Otherwise, return the comparison of the timestamp.
             return (otherMessage == null) ? 1 : Timestamp.CompareTo(otherMessage.Timestamp);
-
         }
 
         #endregion

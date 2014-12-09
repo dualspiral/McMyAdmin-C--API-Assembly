@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using McMyAdminAPI.Implementations;
 using McMyAdminAPI.Interfaces;
 using Moq;
 using NUnit.Framework;
-using McMyAdminAPI.Implementations;
 
 namespace McMyAdminAPI.NUnitTests
 {
