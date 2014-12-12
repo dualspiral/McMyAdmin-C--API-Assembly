@@ -1,5 +1,3 @@
 ## C# API library for McMyAdmin 2 servers
 
-In progress! Built against .NET 4, requires JSON.NET for .NET 4.
-
-Licensed under the MIT licence (see the LICENCE.md file for details).
+Somewhat in progress. Build against .NET 4, works with .NET and Mono runtimes. Licensed under the MIT license (do what you want, just make sure my copyright statement stays in place!)
